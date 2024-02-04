@@ -5,7 +5,22 @@
 import PySimpleGUI as psg
 import time
 
-# constants
+'''Example DB info
+
+import sqlite3
+
+dbVar = sqlite3.connect("path")
+
+def getTable(someFile, dataIndex):
+    sqlCommand = "SELECT * FROM TABLE"
+    cursor = dbVar.execute(sqlCommand)
+    for row in cursor:
+        for entry in row
+            return entry # would return TABLE
+'''
+
+# variables
+startingHeight = 100000
 weight = 0
 fuel = 0
 oxygen = 0
@@ -15,7 +30,7 @@ thrusterToggle = False
 parachuteReleased = False
 
 # graph setup
-graph=psg.Graph(canvas_size=(300,900), graph_bottom_left=(0, -1000), graph_top_right=(10000,30000),
+graph=psg.Graph(canvas_size=(300,900), graph_bottom_left=(0, -1000), graph_top_right=((startingHeight/3),(startingHeight+startingHeight/100)),
     background_color='black', enable_events=True, drag_submits=True, key='graph')
 # column1 setup with text and buttons
 column1 = [
@@ -27,19 +42,18 @@ column1 = [
     [psg.Button("Thrusters")],
     [psg.Button("Parachute")],
 ]
-# column2 setup with graph and anything else we wanna add
+# column2 setup with graph and anything else we want to add
 column2 = [
     [graph]
-    #[psg.Button('LEFT'), psg.Button('RIGHT'), psg.Button('UP'), psg.Button('DOWN')]
 ]
 # layout puts the window layout together an window instantiates the window
 layout = [[psg.Column(column1), psg.VSeparator(), psg.Column(column2)]]
 window = psg.Window('Penguin Lander', layout, finalize=True)
 
 # rocket starting location and instantiation of rocket and moon
-x1,y1 = 5000,15000
+x1,y1 = (startingHeight/6),startingHeight
 rocket = graph.draw_circle((x1,y1), 100, fill_color='black', line_color='white')
-moon = graph.draw_rectangle((10000,1000), (0,-1000), line_color='grey', fill_color='grey')
+moon = graph.draw_rectangle(((startingHeight/3),(startingHeight/30)), (0,(-startingHeight/30)), line_color='grey', fill_color='grey')
 
 # functions we call every 1 second
 def moveRocket():
@@ -75,22 +89,7 @@ while True:
         pass # user didn't do anything
     if event == 'Thrusters': # Thruster button pushed
         thrusterToggle = not thrusterToggle
-        print("thrusters: " + str(thrusterToggle))
     if event == 'Parachute': # Parachute button pushed
         parachuteReleased = True
-    '''
-    if event == 'RIGHT':
-        graph.MoveFigure(rocket, 100, 0)
-    if event == 'LEFT':
-        graph.MoveFigure(rocket, -100,0)
-    if event == 'UP':
-        graph.MoveFigure(rocket, 0, 100)
-    if event == 'DOWN':
-        graph.MoveFigure(rocket, 0,-100)
-    if event=="graph+UP":
-        x2,y2= values['graph']
-        graph.MoveFigure(rocket, x2-x1, y2-y1)
-        x1,y1=x2,y2
-    '''
-      
+
 window.close()
