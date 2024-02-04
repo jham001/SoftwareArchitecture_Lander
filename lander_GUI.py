@@ -3,6 +3,7 @@
 
 # libraries
 import PySimpleGUI as psg
+from random import randrange
 import time
 
 '''Example DB info
@@ -30,7 +31,8 @@ thrusterToggle = False
 parachuteReleased = False
 
 # graph setup
-graph=psg.Graph(canvas_size=(300,900), graph_bottom_left=(0, -1000), graph_top_right=((startingHeight/3),(startingHeight+startingHeight/100)),
+graph=psg.Graph(canvas_size=(300,900), graph_bottom_left=(0, -1000),
+    graph_top_right=((startingHeight/3), (startingHeight+startingHeight/100)),
     background_color='black', enable_events=True, drag_submits=True, key='graph')
 # column1 setup with text and buttons
 column1 = [
@@ -50,10 +52,19 @@ column2 = [
 layout = [[psg.Column(column1), psg.VSeparator(), psg.Column(column2)]]
 window = psg.Window('Penguin Lander', layout, finalize=True)
 
-# rocket starting location and instantiation of rocket and moon
-x1,y1 = (startingHeight/6),startingHeight
-rocket = graph.draw_circle((x1,y1), 100, fill_color='black', line_color='white')
-moon = graph.draw_rectangle(((startingHeight/3),(startingHeight/30)), (0,(-startingHeight/30)), line_color='grey', fill_color='grey')
+# objects on the graph
+rocket = graph.draw_circle(((startingHeight/6),startingHeight), 1000,
+    fill_color='red', line_color='white')
+graph.bring_figure_to_front(rocket)
+moon = graph.draw_rectangle(((startingHeight/3),(startingHeight/30)),
+    (0,(-startingHeight/30)), line_color='grey', fill_color='grey')
+for stars in range(300):
+    x,y = randrange(int(startingHeight/3)), randrange(int(startingHeight))
+    star = graph.draw_circle((x, y), 100, line_color='white',  fill_color='white')
+    graph.send_figure_to_back(star)
+for craters in range(40):
+    x,y = randrange(int(startingHeight/3)), startingHeight/40-randrange(int(startingHeight/30))
+    crater = graph.draw_circle((x, y), randrange(int(6)+3)*100, line_color='#333333',  fill_color='#767676')
 
 # functions we call every 1 second
 def moveRocket():
