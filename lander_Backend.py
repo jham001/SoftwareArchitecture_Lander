@@ -1,3 +1,3 @@
 # libraries
 import sqlite3
-conn = sqlite3.connect('example.db')
+conn = sqlite3.connect('blackboard.db')
