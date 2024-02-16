@@ -4,31 +4,19 @@
 # libraries
 import PySimpleGUI as psg
 from random import randrange
-import time
-
-'''Example DB info
-
-import sqlite3
-
-dbVar = sqlite3.connect("path")
-
-def getTable(someFile, dataIndex):
-    sqlCommand = "SELECT * FROM TABLE"
-    cursor = dbVar.execute(sqlCommand)
-    for row in cursor:
-        for entry in row
-            return entry # would return TABLE
-'''
 
 # variables
 startingHeight = 100000
-weight = 0
-fuel = 0
-oxygen = 0
-speed = 0
-elevation = 0
+altitude = startingHeight
+fuel = 4000
+weight = 5000
+velocity = 200
+impactTime = 100
 thrusterToggle = False
 parachuteReleased = False
+
+# set theme
+psg.theme('DarkBlue13')
 
 # graph setup
 graph=psg.Graph(canvas_size=(300,900), graph_bottom_left=(0, -1000),
@@ -36,11 +24,11 @@ graph=psg.Graph(canvas_size=(300,900), graph_bottom_left=(0, -1000),
     background_color='black', enable_events=True, drag_submits=True, key='graph')
 # column1 setup with text and buttons
 column1 = [
-    [psg.Text("Ship Weight:"), psg.Text(str(weight) + " kg", key="weighttxt")],
+    [psg.Text("Altitude:"), psg.Text(str(altitude) + " m", key="altitudetxt")],
     [psg.Text("Fuel Remaining:"), psg.Text(str(fuel) + " kg", key="fueltxt")],
-    [psg.Text("Oxygen Remaining:"), psg.Text(str(oxygen) + " L", key="oxygentxt")],
-    [psg.Text("Speed"), psg.Text(str(speed) + " m/s", key="speedtxt")],
-    [psg.Text("Elevation"), psg.Text(str(elevation) + " m", key="elevationtxt")],
+    [psg.Text("Total Weight:"), psg.Text(str(weight) + " kg", key="weighttxt")],
+    [psg.Text("Velocity:"), psg.Text(str(velocity) + " m/s", key="velocitytxt")],
+    [psg.Text("Time until Impact:"), psg.Text(str(impactTime) + " s", key="impacttimetxt")],
     [psg.Button("Thrusters")],
     [psg.Button("Parachute")],
 ]
@@ -62,36 +50,46 @@ for stars in range(300):
     x,y = randrange(int(startingHeight/3)), randrange(int(startingHeight))
     star = graph.draw_circle((x, y), 100, line_color='white',  fill_color='white')
     graph.send_figure_to_back(star)
-for craters in range(40):
+for craters in range(35):
     x,y = randrange(int(startingHeight/3)), startingHeight/40-randrange(int(startingHeight/30))
-    crater = graph.draw_circle((x, y), randrange(int(6)+3)*100, line_color='#333333',  fill_color='#767676')
+    crater = graph.draw_circle((x, y), (randrange(int(6))+3)*100, line_color='#333333',  fill_color='#767676')
 
 # functions we call every 1 second
+def updateAltitude():
+    # get new altitude
+    
+    # update altitude
+    window['altitudetxt'].update(str(altitude) + " m")
+def updateFuel():
+    # get new fuel
+    
+    # update fuel
+    window['fueltxt'].update(str(fuel) + " kg")
+def updateWeight():
+    # get new weight
+    
+    # update weight
+    window['weighttxt'].update(str(weight) + " kg")
+def updateVelocity():
+    # get new velocity
+    
+    # update velocity
+    window['velocitytxt'].update(str(velocity) + " m/s")
+def updateImpactTime():
+    # get new impact time
+    
+    # update impact time
+    window['impacttimetxt'].update(str(impactTime) + " s")
 def moveRocket():
     if thrusterToggle == True:
         graph.MoveFigure(rocket, 0,-100)
     else:
         graph.MoveFigure(rocket, 0,-200)
-def updateFuel():
-    pass
-def updateOxygen():
-    pass
-def updateSpeed():
-    pass
-def updateElevation():
-    pass
 
 # infinite loop
 while True:
     # line 1 of loop waits 1 second and executes
     event, values = window.read(timeout = 1000)
-    
-    # call functions
-    moveRocket()
-    updateFuel()
-    updateOxygen()
-    updateSpeed()
-    updateElevation()
     
     # get any user inputs
     if event == psg.WIN_CLOSED:
@@ -102,5 +100,13 @@ while True:
         thrusterToggle = not thrusterToggle
     if event == 'Parachute': # Parachute button pushed
         parachuteReleased = True
-
+    
+    # call functions
+    updateAltitude()
+    updateFuel()
+    updateWeight()
+    updateVelocity()
+    updateImpactTime()
+    moveRocket()
+    
 window.close()
