@@ -1,5 +1,5 @@
-# Mars/Moon lander psg Trial 1.0
-# 2-2-24 David Nalywajko
+# Mars/Moon lander psg version 2
+# 2-16-24 David Nalywajko
 
 # libraries
 import PySimpleGUI as psg
@@ -53,14 +53,18 @@ moon = graph.draw_rectangle(((startingHeight/3),(startingHeight/30)),
     (0,(-startingHeight/30)), line_color='grey', fill_color='grey')
 for stars in range(300):
     x,y = randrange(int(startingHeight/3)), randrange(int(startingHeight))
-    star = graph.draw_circle((x, y), 100, line_color='white',  fill_color='white')
-    graph.send_figure_to_back(star)
+    star = graph.draw_circle((x, y), startingHeight/1000, line_color='white',  fill_color='white')
 for craters in range(35):
     x,y = randrange(int(startingHeight/3)), startingHeight/40-randrange(int(startingHeight/30))
-    crater = graph.draw_circle((x, y), (randrange(int(6))+3)*100, line_color='#333333',  fill_color='#767676')
+    crater = graph.draw_circle((x, y), (randrange(int(6))+3)*100,
+        line_color='#333333',  fill_color='#767676')
+
+# put shapes in right layers
+graph.send_figure_to_back(star)
 graph.bring_figure_to_front(rocketBottom)
 graph.bring_figure_to_front(rocketTop)
 graph.bring_figure_to_front(rocketMiddle)
+
 # functions we call every 1 second
 def updateAltitude():
     # get new altitude
@@ -88,15 +92,15 @@ def updateImpactTime():
     # update impact time
     window['impacttimetxt'].update(str(impactTime) + " s")
 def moveRocket():
-    # get current velocity
+    # get change in position
     if thrusterToggle == True:
-        velocity = -200
+        positionChange = -200
     else:
-        velocity = -400
+        positionChange = -400
     # update visual position of rocket
-    graph.MoveFigure(rocketTop, 0, velocity)
-    graph.MoveFigure(rocketMiddle, 0, velocity)
-    graph.MoveFigure(rocketBottom, 0, velocity)
+    graph.MoveFigure(rocketTop, 0, positionChange)
+    graph.MoveFigure(rocketMiddle, 0, positionChange)
+    graph.MoveFigure(rocketBottom, 0, positionChange)
 
 # infinite loop
 while True:
