@@ -6,7 +6,7 @@ import PySimpleGUI as psg
 from random import randrange
 
 # variables
-startingHeight = 100000
+startingHeight = 10000
 Ialtitude = startingHeight
 Ifuel = 4000
 Iweight = 5000
@@ -43,12 +43,12 @@ window = psg.Window('Penguin Lander', layout, finalize=True)
 # objects on the graph
 rocketTop = graph.DrawPolygon(((startingHeight/6-500, startingHeight + 1000),
     (startingHeight/6+500, startingHeight + 1000), (startingHeight/6, startingHeight + 1800)),
-    fill_color='red', line_color='white')
+    fill_color='blue', line_color='#ECDEC9')
 rocketMiddle = graph.DrawRectangle((startingHeight/6-500, startingHeight + 1000),
-    (startingHeight/6+500, startingHeight-1000), fill_color='red', line_color='white')
+    (startingHeight/6+500, startingHeight-1000), fill_color='blue', line_color='#ECDEC9')
 rocketBottom = graph.DrawPolygon(((startingHeight/6-900, startingHeight - 1600),
-    (startingHeight/6, startingHeight + 1900), (startingHeight/6+950, startingHeight - 1600),
-    (startingHeight/6, startingHeight-1100)), fill_color='red', line_color='white')
+    (startingHeight/6, startingHeight + 1800), (startingHeight/6+950, startingHeight - 1600),
+    (startingHeight/6, startingHeight-1100)), fill_color='blue', line_color='#ECDEC9')
 moon = graph.draw_rectangle(((startingHeight/3),(startingHeight/30)),
     (0,(-startingHeight/30)), line_color='grey', fill_color='grey')
 for stars in range(300):
@@ -88,14 +88,15 @@ def updateImpactTime():
     # update impact time
     window['impacttimetxt'].update(str(impactTime) + " s")
 def moveRocket():
+    # get current velocity
     if thrusterToggle == True:
-        graph.MoveFigure(rocketTop, 0, -100)
-        graph.MoveFigure(rocketMiddle, 0, -100)
-        graph.MoveFigure(rocketBottom, 0, -100)
+        velocity = -200
     else:
-        graph.MoveFigure(rocketTop, 0, -200)
-        graph.MoveFigure(rocketMiddle, 0, -200)
-        graph.MoveFigure(rocketBottom, 0, -200)
+        velocity = -400
+    # update visual position of rocket
+    graph.MoveFigure(rocketTop, 0, velocity)
+    graph.MoveFigure(rocketMiddle, 0, velocity)
+    graph.MoveFigure(rocketBottom, 0, velocity)
 
 # infinite loop
 while True:
