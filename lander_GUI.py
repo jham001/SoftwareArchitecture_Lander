@@ -6,7 +6,7 @@ import PySimpleGUI as psg
 from random import randrange
 
 # variables
-startingHeight = 10000
+startingHeight = 100000
 Ialtitude = startingHeight
 Ifuel = 4000
 Iweight = 5000
