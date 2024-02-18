@@ -6,6 +6,7 @@
 h = 100000
 hInit = 100000
 vInit = -100
+v = vInit
 a = 0
 t = 0
 g = 3.72076 # m/s^2 Mars
@@ -19,9 +20,13 @@ def updateAcceleration(A, g):
     a = A-g
     return a
 
+def updateVelocity(v, a):
+    
+    return v
 
 
-def main(h, hInit, vInit, t, a, g, A):
+
+def main(h, hInit, vInit, v, t, a, g, A):
     while True:
         t += 1
         a = updateAcceleration(A, g)
@@ -29,4 +34,4 @@ def main(h, hInit, vInit, t, a, g, A):
         print(h)
 
 
-main(h, hInit, vInit, t, a, g, A)
+main(h, hInit, vInit, v, t, a, g, A)
