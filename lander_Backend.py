@@ -14,6 +14,24 @@ DATA.execute ('''CREATE TABLE CRICKETERS (
    Country VARCHAR(255)
 );''')
 
+# DB
+    # Table Trial #1
+    # Table Trial #2
+
+# Make DB if it does not exist
+# Get number of latest trial
+# Make a new Table with new trial number
+    # This is the Table we will use
+
+# Table stores Altitude, Fuel, Weight, Velocity, Impact till Time, Displacement as columns
+# Each row is a new timestamp
+#   ex. t=0, t=1, t=2
+
+# There should be a method to set them all
+# There should be methods to get each individualy (Latest value for now)
+
+
+
 # Close blackboard
 DATA.close()
 

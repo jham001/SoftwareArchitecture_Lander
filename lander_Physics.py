@@ -35,3 +35,5 @@ def main(h, hInit, vInit, v, t, a, g, A):
 
 
 main(h, hInit, vInit, v, t, a, g, A)
+
+# Altitude, Fuel, Weight, Velocity, Impact till Time, Displacement
