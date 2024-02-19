@@ -18,6 +18,10 @@ def getFuel():
     # Value from last row, Velocity Column
     return 1 
 
+def AddRow(h, m_fuel, m_lander, v, t_minus, displacement):
+    # Add new row to DB with this data
+    pass
+
 # Connect to blackboard
 DATA = sqlite3.connect('blackboard.db')
 print("Connection established ..........")

@@ -84,6 +84,7 @@ def main(t):
         t_minus = 1 # Get Actual Value Later
 
         # Save all new data to DB
+        lander_Backend.AddRow(h, m_fuel, m_lander, v, t_minus, displacement)
 
         #print(h)
 
