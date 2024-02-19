@@ -37,6 +37,8 @@ def newDataEntry(tableName, value1, value2, value3, value4):
 # Note that not only do you have to execute this command, but you also have to commit it.
 
 # Here's a tutorial for how to use SQLite. You can also find more stuff by just Googling it.
+# https://www.digitalocean.com/community/tutorials/how-to-use-the-sqlite3-module-in-python-3
+# Here's another slightly more in depth but out of date tutorial:
 # https://www.tutorialspoint.com/sqlite/sqlite_python.htm
 
 # datatypes in SQLite are a little different than normal SQL. Here's a list of them:
