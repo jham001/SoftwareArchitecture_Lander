@@ -126,3 +126,9 @@ while True:
     moveRocket()
     
 window.close()
+
+
+def is_thrust_on():
+    if thrusterToggle == True:
+        return True
+    else: return False
