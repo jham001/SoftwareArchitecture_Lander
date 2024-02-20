@@ -1,18 +1,33 @@
 # libraries
 import sqlite3
 
+
+def getAltitude():
+    # Value from last row, Altitude Column
+    return 1 
+
+def getVelocity():
+    # Value from last row, Velocity Column
+    return 1 
+
+def getMass():
+    # Value from last row, Velocity Column
+    return 1     
+
+def getFuel():
+    # Value from last row, Velocity Column
+    return 1 
+
+def AddRow(h, m_fuel, m_lander, v, t_minus, displacement):
+    # Add new row to DB with this data
+    pass
+
 # Connect to blackboard
 DATA = sqlite3.connect('blackboard.db')
 print("Connection established ..........")
 
 
-DATA.execute ('''CREATE TABLE CRICKETERS (
-   First_Name VARCHAR(255),
-   Last_Name VARCHAR(255),
-   Age int,
-   Place_Of_Birth VARCHAR(255),
-   Country VARCHAR(255)
-);''')
+
 
 # DB
     # Table Trial #1
@@ -23,13 +38,18 @@ DATA.execute ('''CREATE TABLE CRICKETERS (
 # Make a new Table with new trial number
     # This is the Table we will use
 
-# Table stores Altitude, Fuel, Weight, Velocity, Impact till Time, Displacement as columns
+# Table stores Altitude, Fuel, Weight, Velocity, Time till Impact, Displacement as columns
 # Each row is a new timestamp
 #   ex. t=0, t=1, t=2
 
+    # New Table will hold initial values, Dont worry about them too much for now, can use placeholders.
+    # Altitude = 100000, Fuel = placeholder, Weight = placeholder, Velocity = placeholder, Time till Impact = 1, Displacement = 0
+
+
+
 # There should be a method to set them all
 # There should be methods to get each individualy (Latest value for now)
-
+  
 
 
 # Close blackboard

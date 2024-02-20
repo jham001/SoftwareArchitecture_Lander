@@ -1,39 +1,27 @@
-# Josh was here
+import lander_Backend
+import lander_GUI
 
-
-# Sophie was here
-
-h = 100000
-hInit = 100000
-vInit = -100
-v = vInit
-a = 0
 t = 0
-g = 3.72076 # m/s^2 Mars OLD
-A = 0
-
-
-
-G_moon = 6.67430*10^(-11) # Moon (m^3/(kg*s^2))
-m_moon = 7.34767309*10^22 # Moon kg
-r_moon = 1740000 # Moon (m)
-m_lander = 1
 
 dt = 1 # (sec)
 
 # Gravitational Acceleration
-def getGravitationalAcceleration(G_moon, r_moon, h):
-    g_moon = G_moon / ((r_moon + h)^2)
+def getGravitationalAcceleration():
+    G_moon = 6.67430*10**(-11) # Moon (m^3/(kg*s^2))
+    m_moon = 7.34767309*10**22 # Moon kg
+    r_moon = 1740000 # Moon (m)
+    h = lander_Backend.getAltitude() # (m)
+    g_moon = G_moon * m_moon / ((r_moon + h)^2)
     return g_moon
 
 
 # get current acceleration
 def getCurrentAcceleration():
     # Net Force= Force of thrust - Force of gravity
-    F_Thrust = 1 # Get proper Value 
-    g_moon = getGravitationalAcceleration() # Get proper Value (t)
-    m_lander = 1 # Get proper Value (t-1)
-    m_fuel = 1 # Get this proper Value
+    F_Thrust = 16000 * lander_GUI.is_thrust_on() # (N)
+    g_moon = getGravitationalAcceleration() # (t)
+    m_lander = lander_Backend.getMass() # (kg)
+    m_fuel = lander_Backend.getFuel() # (kg)
 
     F_g = g_moon * m_lander
     Force_Net = F_Thrust - F_g
@@ -44,21 +32,24 @@ def getCurrentAcceleration():
 
 # Current Lander Velocity
 def getCurrentLanderVelocity():
-    F_Thrust = 1 # Get proper Value 
-    g_moon = 1 # Get proper Value (t)
-    v_t_old = 1 # Get this proper Value
+    dt = 1 # (sec)
+
+    g_moon = getGravitationalAcceleration() # (t)
+    v_old = lander_Backend.getVelocity() # (m/s)
 
     a_t = getCurrentAcceleration()
 
-    v_t = v_t_old + a_t * dt
+    v_t = v_old + a_t * dt
     return v_t
 
 
 # Current Altitude
 def getCurrentAltitude():
-    h_old = 1 # Get proper value
-    v_old = 1# Get proper value
-    a_t = getCurrentAcceleration()
+    dt = 1 # (sec)
+
+    h_old = lander_Backend.getAltitude() # (m)
+    v_old = lander_Backend.getVelocity() # (m/s)
+    a_t = getCurrentAcceleration() # (m/s^2)
     
     h_t_after_thrust = h_old - (v_old * dt) - (0.5 * a_t * dt^2)
     
@@ -67,27 +58,37 @@ def getCurrentAltitude():
 
 
 
-def main():
+def main(t):
     while True:
         t += 1
         
+        # Used later for displacement
+        h_old = lander_Backend.getAltitude() # (m)
+
         # get Altitude
         h = getCurrentAltitude()
+       
+        # get Displacement
+        displacement = h - h_old # (m)
         
         # get Fuel
+        m_fuel = lander_Backend.getFuel() # (kg)
         
         # get Weight
+        m_lander = lander_Backend.getMass() # (kg)
         
         # get Velocity
         v = getCurrentLanderVelocity()
 
-        # get Time till Impace
-        # get Displacement
+        # get Time till Impact
+        t_minus = 1 # Get Actual Value Later
+
+        # Save all new data to DB
+        lander_Backend.AddRow(h, m_fuel, m_lander, v, t_minus, displacement)
+
+        #print(h)
 
 
-        print(h)
-
-
-main()
+main(t)
 
 # Altitude, Fuel, Weight, Velocity, Impact till Time, Displacement
