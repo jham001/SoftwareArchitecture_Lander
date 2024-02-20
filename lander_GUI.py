@@ -54,13 +54,13 @@ moon = graph.draw_rectangle(((startingHeight/3),(startingHeight/30)),
 for stars in range(300):
     x,y = randrange(int(startingHeight/3)), randrange(int(startingHeight))
     star = graph.draw_circle((x, y), startingHeight/1000, line_color='white',  fill_color='white')
+    graph.send_figure_to_back(star)
 for craters in range(35):
     x,y = randrange(int(startingHeight/3)), startingHeight/40-randrange(int(startingHeight/30))
     crater = graph.draw_circle((x, y), (randrange(int(6))+3)*100,
         line_color='#333333',  fill_color='#767676')
 
 # put shapes in right layers
-graph.send_figure_to_back(star)
 graph.bring_figure_to_front(rocketBottom)
 graph.bring_figure_to_front(rocketTop)
 graph.bring_figure_to_front(rocketMiddle)
