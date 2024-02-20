@@ -65,6 +65,10 @@ graph.bring_figure_to_front(rocketBottom)
 graph.bring_figure_to_front(rocketTop)
 graph.bring_figure_to_front(rocketMiddle)
 
+# random functions
+def is_thrust_on():
+    return thrusterToggle
+
 # functions we call every 1 second
 def updateAltitude():
     # get new altitude
@@ -126,9 +130,3 @@ while True:
     moveRocket()
     
 window.close()
-
-
-def is_thrust_on():
-    if thrusterToggle == True:
-        return True
-    else: return False
