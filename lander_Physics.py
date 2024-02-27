@@ -13,6 +13,8 @@ def getGravitationalAcceleration():
     r_moon = 1740000.0 # Moon (m)
     h = lander_Backend.getAltitude() # (m)
     g_moon = G_moon * m_moon / ((r_moon + h)**2)
+    
+    print(f"g_moon: {g_moon}")
     return g_moon
 
 
@@ -28,8 +30,9 @@ def getCurrentAcceleration(thrusterToggle):
     Force_Net = F_Thrust - F_g
 
 
-    if (m_lander - 0.5* m_fuel) != 0:
-        a_t = Force_Net / (m_lander - 0.5* m_fuel) 
+    if (m_lander - 0.5 * m_fuel) != 0:
+        a_t = Force_Net / (m_lander - 0.5 * m_fuel) 
+        print(f"a_t: {a_t}")
         return a_t
 
 
@@ -43,6 +46,8 @@ def getCurrentLanderVelocity(thrusterToggle):
     a_t = getCurrentAcceleration(thrusterToggle)
 
     v_t = v_old + a_t * dt
+    
+    print(f"v_t: {v_t}")
     return v_t
 
 
@@ -53,47 +58,14 @@ def getCurrentAltitude(thrusterToggle):
     h_old = lander_Backend.getAltitude() # (m)
     v_old = lander_Backend.getVelocity() # (m/s)
     a_t = getCurrentAcceleration(thrusterToggle) # (m/s^2)
+
+    h_t_after_thrust = h_old + (v_old * dt) + (0.5 * a_t * dt**2)
     
-    h_t_after_thrust = h_old - (v_old * dt) - (0.5 * a_t * dt**2)
-    
+    print(f"h_t_after_thrust: {h_t_after_thrust}")
+
     return h_t_after_thrust
 
 
-
-
-def main(t):
-    while True:
-        t += 1
-        thrusterToggle = FALSE
-        
-        # Used later for displacement
-        h_old = lander_Backend.getAltitude() # (m)
-
-        # get Altitude
-        h = getCurrentAltitude(thrusterToggle)
-       
-        # get Displacement
-        displacement = h - h_old # (m)
-        
-        # get Fuel
-        m_fuel = lander_Backend.getFuel() # (kg)
-        
-        # get Weight
-        m_lander = lander_Backend.getMass() # (kg)
-        
-        # get Velocity
-        v = getCurrentLanderVelocity(thrusterToggle)
-
-        # get Time till Impact
-        t_minus = 1 # Get Actual Value Later
-
-        # Save all new data to DB
-        lander_Backend.AddRow(h, m_fuel, m_lander, v, t_minus, displacement)
-
-        #print(h)
-
-
-#main(t)
 
 # Altitude, Fuel, Weight, Velocity, Impact till Time, Displacement
 

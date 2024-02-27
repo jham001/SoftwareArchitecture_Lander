@@ -8,13 +8,13 @@ import lander_Physics as physics
 
 # variables
 time_elapsed = 0
-startingHeight = 100000
+startingHeight = 100000 # m
 altitude = startingHeight
-m_fuel = 4000
-m_lander = 5000
-velocity = 200
-positionChange = 0
-impactTime = 100
+m_fuel = 4000 # kg
+m_lander = 5000 # kg
+velocity = -200 # m/s
+positionChange = 0 # m
+impactTime = 100 # s
 thrusterToggle = False
 parachuteReleased = False
 physics.newTable(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange) # Make a new blackboard for trial
@@ -77,7 +77,7 @@ def updateAltitude(thrusterToggle):
         #altitude = 42
     altitude = physics.getCurrentAltitude(thrusterToggle)
     # update altitude
-    window['altitudetxt'].update(str(altitude) + " m")
+    window['altitudetxt'].update(str(round(altitude, 2)) + " m")
     
 def updateFuel():
     global m_fuel
@@ -85,7 +85,7 @@ def updateFuel():
         #fuel = 69
     m_fuel = physics.getFuel()
     # update fuel
-    window['fueltxt'].update(str(m_fuel) + " kg")
+    window['fueltxt'].update(str(round(m_fuel, 2)) + " kg")
     
 def updateWeight():
     global m_lander
@@ -94,7 +94,7 @@ def updateWeight():
         #weight = 96
     m_lander = physics.getMass()
     # update weight
-    window['weighttxt'].update(str(m_lander) + " kg")
+    window['weighttxt'].update(str(round(m_lander, 2)) + " kg")
     
 def updateVelocity(thrusterToggle):
     global velocity
@@ -103,7 +103,7 @@ def updateVelocity(thrusterToggle):
         #velocity = 456
     velocity = physics.getCurrentLanderVelocity(thrusterToggle)
     # update velocity
-    window['velocitytxt'].update(str(velocity) + " m/s")
+    window['velocitytxt'].update(str(round(velocity, 2)) + " m/s")
     
 def updateImpactTime():
     global impactTime
@@ -112,7 +112,7 @@ def updateImpactTime():
         #impactTime = 789
     impactTime = physics.getImpactTime()
     # update impact time
-    window['impacttimetxt'].update(str(impactTime) + " s")
+    window['impacttimetxt'].update(str(round(impactTime, 2)) + " s")
     
 def moveRocket(thrusterToggle):
     global positionChange
