@@ -7,16 +7,18 @@ from random import randrange
 import lander_Physics as physics
 
 # variables
+time_elapsed = 0
 startingHeight = 100000
-Ialtitude = startingHeight
-Ifuel = 4000
-Iweight = 5000
-Ivelocity = 200
-IimpactTime = 100
+altitude = startingHeight
+m_fuel = 4000
+m_lander = 5000
+velocity = 200
+positionChange = 0
+impactTime = 100
 thrusterToggle = False
 parachuteReleased = False
-physics.newTable() # Make a new blackboard for trial
-
+physics.newTable(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange) # Make a new blackboard for trial
+    
 # set theme
 psg.theme('DarkBlue13')
 
@@ -26,11 +28,11 @@ graph=psg.Graph(canvas_size=(300,900), graph_bottom_left=(0, -1000),
     background_color='black', enable_events=True, drag_submits=True, key='graph')
 # column1 setup with text and buttons
 column1 = [
-    [psg.Text("Altitude:"), psg.Text(str(Ialtitude) + " m", key="altitudetxt")],
-    [psg.Text("Fuel Remaining:"), psg.Text(str(Ifuel) + " kg", key="fueltxt")],
-    [psg.Text("Total Weight:"), psg.Text(str(Iweight) + " kg", key="weighttxt")],
-    [psg.Text("Velocity:"), psg.Text(str(Ivelocity) + " m/s", key="velocitytxt")],
-    [psg.Text("Time until Impact:"), psg.Text(str(IimpactTime) + " s", key="impacttimetxt")],
+    [psg.Text("Altitude:"), psg.Text(str(altitude) + " m", key="altitudetxt")],
+    [psg.Text("Fuel Remaining:"), psg.Text(str(m_fuel) + " kg", key="fueltxt")],
+    [psg.Text("Total Weight:"), psg.Text(str(m_lander) + " kg", key="weighttxt")],
+    [psg.Text("Velocity:"), psg.Text(str(velocity) + " m/s", key="velocitytxt")],
+    [psg.Text("Time until Impact:"), psg.Text(str(impactTime) + " s", key="impacttimetxt")],
     [psg.Button("Thrusters")],
     [psg.Button("Parachute")],
 ]
@@ -67,12 +69,10 @@ graph.bring_figure_to_front(rocketBottom)
 graph.bring_figure_to_front(rocketTop)
 graph.bring_figure_to_front(rocketMiddle)
 
-# random functions
-def is_thrust_on():
-    return thrusterToggle
-
 # functions we call every 1 second
 def updateAltitude(thrusterToggle):
+    global altitude
+
     # get new altitude
         #altitude = 42
     altitude = physics.getCurrentAltitude(thrusterToggle)
@@ -80,20 +80,25 @@ def updateAltitude(thrusterToggle):
     window['altitudetxt'].update(str(altitude) + " m")
     
 def updateFuel():
+    global m_fuel
     # get new fuel
         #fuel = 69
-    fuel = physics.getFuel()
+    m_fuel = physics.getFuel()
     # update fuel
-    window['fueltxt'].update(str(fuel) + " kg")
+    window['fueltxt'].update(str(m_fuel) + " kg")
     
 def updateWeight():
+    global m_lander
+
     # get new weight
         #weight = 96
-    weight = physics.getMass()
+    m_lander = physics.getMass()
     # update weight
-    window['weighttxt'].update(str(weight) + " kg")
+    window['weighttxt'].update(str(m_lander) + " kg")
     
 def updateVelocity(thrusterToggle):
+    global velocity
+
     # get new velocity
         #velocity = 456
     velocity = physics.getCurrentLanderVelocity(thrusterToggle)
@@ -101,6 +106,8 @@ def updateVelocity(thrusterToggle):
     window['velocitytxt'].update(str(velocity) + " m/s")
     
 def updateImpactTime():
+    global impactTime
+
     # get new impact time
         #impactTime = 789
     impactTime = physics.getImpactTime()
@@ -108,6 +115,8 @@ def updateImpactTime():
     window['impacttimetxt'].update(str(impactTime) + " s")
     
 def moveRocket(thrusterToggle):
+    global positionChange
+
     # get change in position
     #if thrusterToggle == True:
     #    positionChange = -200
@@ -141,5 +150,9 @@ while True:
     updateVelocity(thrusterToggle)
     updateImpactTime()
     moveRocket(thrusterToggle)
+    
+    time_elapsed += 1
+    print(time_elapsed)
+    physics.addRow(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange)
     
 window.close()

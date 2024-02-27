@@ -1,9 +1,9 @@
 # libraries
 import sqlite3
 
-table_name = ""  # Declare table_name as a global variable
+table_name = f""  # Declare table_name as a global variable
 
-def newTable():
+def newTable(time_elapsed, h, v, m_fuel, m_lander, displacement):
     global table_name  # Declare that you are modifying the global variable within this function
 
     # Connect to blackboard
@@ -18,7 +18,8 @@ def newTable():
 
     # Print the number of tables
     print("Number of tables in the database:", num_tables)
-    table_name = f"blackboard_display_data{num_tables - 1}"
+    table_name = f"blackboard_display_data{num_tables}"
+    print(table_name)
 
     # create a new table
     cursor.execute(f'''CREATE TABLE IF NOT EXISTS {table_name}
@@ -32,12 +33,12 @@ def newTable():
     );''')
 
     # Add Initial values
-    Time = str(1)
-    Altitude = str(100000)
-    Velocity = str(1)
-    Fuel = str(1)
-    LanderMass = str(1)
-    Displacement = str(0)
+    Time = time_elapsed
+    Altitude = h
+    Velocity = v
+    Fuel = m_fuel
+    LanderMass = m_lander
+    Displacement = displacement
 
     # Construct the SQL command for insertion
     sqlCommand = f"INSERT INTO {table_name} (time_elapsed_sec, altitude, velocity, fuel_mass, lander_mass, displacement) VALUES (?, ?, ?, ?, ?, ?)"
@@ -167,22 +168,28 @@ def getTotalMass():
     print(f"TotalMass: {result}")
     return result
 
-def AddRow(time_elapsed, h, v, m_fuel, m_lander, m_total, displacement):
+def addRow(time_elapsed, h, v, m_fuel, m_lander, displacement):
+    print("addRow")
     global table_name
 
     # Connect to blackboard
     dbConnection = sqlite3.connect('blackboard.db')
+    cursor = dbConnection.cursor()
+
 
     # Add new row to DB with this data
-    value1 = str(time_elapsed)
-    value2 = str(h)
-    value3 = str(v)
-    value4 = str(m_fuel)
-    value5 = str(m_lander)
-    value6 = str(m_total)
-    value7 = str(displacement)
-    sqlCommand = f"insert into {table_name} values" + "(\"" + value1 + "\", \"" + value2 + "\", " + value3 + ", " + value4 + ", " + value5 + ", " + value6 + ", " + value7 + ")"
-    dbConnection.execute(sqlCommand)
+    Time = time_elapsed
+    Altitude = h
+    Velocity = v
+    Fuel = m_fuel
+    LanderMass = m_lander
+    Displacement = displacement
+
+    # Construct the SQL command for insertion
+    sqlCommand = f"INSERT INTO {table_name} (time_elapsed_sec, altitude, velocity, fuel_mass, lander_mass, displacement) VALUES (?, ?, ?, ?, ?, ?)"
+
+    # Execute the insertion with parameterized values
+    cursor.execute(sqlCommand, (Time, Altitude, Velocity, Fuel, LanderMass, Displacement))
     dbConnection.commit()
     
     # Close blackboard
