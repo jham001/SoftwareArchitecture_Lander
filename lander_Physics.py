@@ -1,4 +1,3 @@
-from pickle import FALSE
 import lander_Backend
 
 
@@ -14,7 +13,6 @@ def getGravitationalAcceleration():
     h = lander_Backend.getAltitude() # (m)
     g_moon = G_moon * m_moon / ((r_moon + h)**2)
     
-    print(f"g_moon: {g_moon}")
     return g_moon
 
 
@@ -32,7 +30,6 @@ def getCurrentAcceleration(thrusterToggle):
 
     if (m_lander - 0.5 * m_fuel) != 0:
         a_t = Force_Net / (m_lander - 0.5 * m_fuel) 
-        print(f"a_t: {a_t}")
         return a_t
 
 
@@ -47,7 +44,6 @@ def getCurrentLanderVelocity(thrusterToggle):
 
     v_t = v_old + a_t * dt
     
-    print(f"v_t: {v_t}")
     return v_t
 
 
@@ -61,8 +57,6 @@ def getCurrentAltitude(thrusterToggle):
 
     h_t_after_thrust = h_old + (v_old * dt) + (0.5 * a_t * dt**2)
     
-    print(f"h_t_after_thrust: {h_t_after_thrust}")
-
     return h_t_after_thrust
 
 

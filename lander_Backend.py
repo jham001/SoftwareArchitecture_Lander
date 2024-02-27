@@ -75,8 +75,7 @@ def getAltitude():
     # Close blackboard
     cursor.close()
     dbConnection.close()
-    
-    print(f"Altitude: {result}")
+
     return result
     
 
@@ -99,7 +98,6 @@ def getVelocity():
     cursor.close()
     dbConnection.close()
     
-    print(f"Velocity: {result}")
     return result
 
 def getFuelMass():
@@ -121,7 +119,6 @@ def getFuelMass():
     cursor.close()
     dbConnection.close()
     
-    print(f"FuelMass: {result}")
     return result
 
 def getLanderMass():
@@ -143,7 +140,6 @@ def getLanderMass():
     cursor.close()
     dbConnection.close()
     
-    print(f"LanderMass: {result}")
     return result   
 
 def getTotalMass():
@@ -164,12 +160,10 @@ def getTotalMass():
     # Close blackboard
     cursor.close()
     dbConnection.close()
-    
-    print(f"TotalMass: {result}")
+
     return result
 
 def addRow(time_elapsed, h, v, m_fuel, m_lander, displacement):
-    print("addRow")
     global table_name
 
     # Connect to blackboard

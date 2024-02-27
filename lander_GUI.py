@@ -19,6 +19,9 @@ thrusterToggle = False
 parachuteReleased = False
 physics.newTable(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange) # Make a new blackboard for trial
     
+isRunning = True
+speed = 10 #1000 is 1 sec (default)
+
 # set theme
 psg.theme('DarkBlue13')
 
@@ -74,7 +77,6 @@ def updateAltitude(thrusterToggle):
     global altitude
 
     # get new altitude
-        #altitude = 42
     altitude = physics.getCurrentAltitude(thrusterToggle)
     # update altitude
     window['altitudetxt'].update(str(round(altitude, 2)) + " m")
@@ -82,7 +84,6 @@ def updateAltitude(thrusterToggle):
 def updateFuel():
     global m_fuel
     # get new fuel
-        #fuel = 69
     m_fuel = physics.getFuel()
     # update fuel
     window['fueltxt'].update(str(round(m_fuel, 2)) + " kg")
@@ -91,7 +92,6 @@ def updateWeight():
     global m_lander
 
     # get new weight
-        #weight = 96
     m_lander = physics.getMass()
     # update weight
     window['weighttxt'].update(str(round(m_lander, 2)) + " kg")
@@ -100,7 +100,6 @@ def updateVelocity(thrusterToggle):
     global velocity
 
     # get new velocity
-        #velocity = 456
     velocity = physics.getCurrentLanderVelocity(thrusterToggle)
     # update velocity
     window['velocitytxt'].update(str(round(velocity, 2)) + " m/s")
@@ -109,7 +108,6 @@ def updateImpactTime():
     global impactTime
 
     # get new impact time
-        #impactTime = 789
     impactTime = physics.getImpactTime()
     # update impact time
     window['impacttimetxt'].update(str(round(impactTime, 2)) + " s")
@@ -118,20 +116,31 @@ def moveRocket(thrusterToggle):
     global positionChange
 
     # get change in position
-    #if thrusterToggle == True:
-    #    positionChange = -200
-    #else:
-    #    positionChange = -400
     positionChange = physics.getDisplacement(thrusterToggle)
     # update visual position of rocket
     graph.MoveFigure(rocketTop, 0, positionChange)
     graph.MoveFigure(rocketMiddle, 0, positionChange)
     graph.MoveFigure(rocketBottom, 0, positionChange)
 
+def collisionCheck():
+    global velocity
+    global altitude
+    global isRunning
+    
+    if (altitude < 0):
+        if (-velocity < 5):
+            #YAY
+            print("YOU WIN")
+        else:
+            #CRASH
+            print("YOU DIED!")
+        isRunning = False
+        
+
 # infinite loop
-while True:
+while isRunning:
     # line 1 of loop waits 1 second and executes
-    event, values = window.read(timeout = 1000)
+    event, values = window.read(timeout = speed)
     
     # get any user inputs
     if event == psg.WIN_CLOSED:
@@ -151,6 +160,8 @@ while True:
     updateImpactTime()
     moveRocket(thrusterToggle)
     
+    collisionCheck()
+
     time_elapsed += 1
     print(time_elapsed)
     physics.addRow(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange)
