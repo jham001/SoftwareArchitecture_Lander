@@ -32,7 +32,7 @@ graph=psg.Graph(canvas_size=(300,900), graph_bottom_left=(0, -1000),
 # column1 setup with text and buttons
 column1 = [
     [psg.Text("Altitude:"), psg.Text(str(altitude) + " m", key="altitudetxt")],
-    [psg.Text("Fuel Remaining:"), psg.Text(str(m_fuel) + " kg", key="fueltxt")],
+    [psg.Text("Fuel Remaining:"), psg.Text(f"{round(m_fuel, 2):.2f}" + " kg", key="fueltxt")],
     [psg.Text("Total Weight:"), psg.Text(str(m_lander) + " kg", key="weighttxt")],
     [psg.Text("Velocity:"), psg.Text(str(velocity) + " m/s", key="velocitytxt")],
     [psg.Text("Time until Impact:"), psg.Text(str(impactTime) + " s", key="impacttimetxt")],
@@ -86,7 +86,7 @@ def updateFuel():
     # get new fuel
     m_fuel = physics.getFuel()
     # update fuel
-    window['fueltxt'].update(str(round(m_fuel, 2)) + " kg")
+    window['fueltxt'].update(f"{round(m_fuel, 2):.2f}" + " kg")
     
 def updateWeight():
     global m_lander
@@ -145,21 +145,28 @@ while isRunning:
     # get any user inputs
     if event == psg.WIN_CLOSED:
         break # user closed the window
+    
     if event == psg.TIMEOUT_KEY:
         pass # user didn't do anything
-    if event == 'Thrusters': # Thruster button pushed
+    
+    if m_fuel < 51:
+        thrusterToggle = False
+    elif event == 'Thrusters': # Thruster button pushed
         thrusterToggle = not thrusterToggle
+        
     if event == 'Parachute': # Parachute button pushed
         parachuteReleased = True
     
     # call functions
     updateAltitude(thrusterToggle)
-    updateFuel()
     updateWeight()
     updateVelocity(thrusterToggle)
     updateImpactTime()
     moveRocket(thrusterToggle)
     
+    if (thrusterToggle):
+        updateFuel()
+
     collisionCheck()
 
     time_elapsed += 1
@@ -167,3 +174,7 @@ while isRunning:
     physics.addRow(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange)
     
 window.close()
+
+
+
+#If fuel < 1, cant use it anymore.

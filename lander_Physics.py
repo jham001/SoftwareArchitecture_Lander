@@ -64,7 +64,11 @@ def getCurrentAltitude(thrusterToggle):
 # Altitude, Fuel, Weight, Velocity, Impact till Time, Displacement
 
 def getFuel():
-    return lander_Backend.getFuelMass()
+    F_Thrust = 16000
+    specificImpulse = 311
+    consumption = F_Thrust*dt/specificImpulse
+    fuel = lander_Backend.getFuelMass() - consumption
+    return fuel
 
 def getMass():
     return lander_Backend.getLanderMass()
