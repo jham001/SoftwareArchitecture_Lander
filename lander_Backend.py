@@ -1,23 +1,56 @@
 # libraries
 import sqlite3
 
+# Connect to blackboard
+dbConnection = sqlite3.connect('blackboard.db')
+
+# Create a cursor object
+cursor = dbConnection.cursor()
+
+# Execute a query to get the number of tables
+cursor.execute("SELECT COUNT(*) FROM sqlite_master WHERE type='table';")
+
+# Fetch the result
+num_tables = cursor.fetchone()[0]
+
+# Print the number of tables
+print("Number of tables in the database:", num_tables)
+table_name = f"blackboard_display_data{num_tables - 1}"
+
 # create a new table
-dbConnection.execute('''create table blackboard_display_data
+cursor.execute(f'''CREATE TABLE IF NOT EXISTS {table_name}
 (
 time_elapsed_sec numeric(12,4),
 altitude numeric(12,4),
 velocity numeric(12,4),
 fuel_mass numeric(12,4),
 lander_mass numeric(12,4),
-total_mass numeric(12,4),
 displacement numeric(12,4)
 );''')
 
-dbConnection.execute('''create table blackboard_constraints
-(
-landing_height numeric (3,2),
-max_landing_velocity numeric(3,2)
-);''')
+
+# Add Initial values
+Time = str(1)
+Altitude = str(100000)
+Velocity = str(1)
+Fuel = str(1)
+LanderMass = str(1)
+Displacement = str(0)
+
+# Construct the SQL command for insertion
+sqlCommand = f"INSERT INTO {table_name} (time_elapsed_sec, altitude, velocity, fuel_mass, lander_mass, displacement) VALUES (?, ?, ?, ?, ?, ?)"
+
+# Execute the insertion with parameterized values
+cursor.execute(sqlCommand, (Time, Altitude, Velocity, Fuel, LanderMass, Displacement))
+
+# Commit the changes
+dbConnection.commit()
+
+
+
+
+
+
 
 def getAltitude():
     # Value from last row, altitude column
@@ -67,13 +100,6 @@ def AddRow(time_elapsed, h, v, m_fuel, m_lander, m_total, displacement):
     dbConnection.execute(sqlCommand)
     dbConnection.commit()
 
-# Connect to blackboard
-DATA = sqlite3.connect('blackboard.db')
-print("Connection established ..........")
-
-
-
-
 
 # DB
     # Table Trial #1
@@ -96,8 +122,6 @@ print("Connection established ..........")
 # There should be a method to set them all
 # There should be methods to get each individualy (Latest value for now)
   
-
-
 # Close blackboard
-DATA.close()
-
+cursor.close()
+dbConnection.close()
