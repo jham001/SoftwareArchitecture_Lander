@@ -1,93 +1,178 @@
 # libraries
 import sqlite3
 
-# Connect to blackboard
-dbConnection = sqlite3.connect('blackboard.db')
+table_name = ""  # Declare table_name as a global variable
 
-# Create a cursor object
-cursor = dbConnection.cursor()
+def newTable():
+    global table_name  # Declare that you are modifying the global variable within this function
 
-# Execute a query to get the number of tables
-cursor.execute("SELECT COUNT(*) FROM sqlite_master WHERE type='table';")
+    # Connect to blackboard
+    dbConnection = sqlite3.connect('blackboard.db')
+    cursor = dbConnection.cursor()
 
-# Fetch the result
-num_tables = cursor.fetchone()[0]
+    # Execute a query to get the number of tables
+    cursor.execute("SELECT COUNT(*) FROM sqlite_master WHERE type='table';")
 
-# Print the number of tables
-print("Number of tables in the database:", num_tables)
-table_name = f"blackboard_display_data{num_tables - 1}"
+    # Fetch the result
+    num_tables = cursor.fetchone()[0]
 
-# create a new table
-cursor.execute(f'''CREATE TABLE IF NOT EXISTS {table_name}
-(
-time_elapsed_sec numeric(12,4),
-altitude numeric(12,4),
-velocity numeric(12,4),
-fuel_mass numeric(12,4),
-lander_mass numeric(12,4),
-displacement numeric(12,4)
-);''')
+    # Print the number of tables
+    print("Number of tables in the database:", num_tables)
+    table_name = f"blackboard_display_data{num_tables - 1}"
 
+    # create a new table
+    cursor.execute(f'''CREATE TABLE IF NOT EXISTS {table_name}
+    (
+    time_elapsed_sec float PRIMARY KEY,
+    altitude float,
+    velocity float,
+    fuel_mass float,
+    lander_mass float,
+    displacement float
+    );''')
 
-# Add Initial values
-Time = str(1)
-Altitude = str(100000)
-Velocity = str(1)
-Fuel = str(1)
-LanderMass = str(1)
-Displacement = str(0)
+    # Add Initial values
+    Time = str(1)
+    Altitude = str(100000)
+    Velocity = str(1)
+    Fuel = str(1)
+    LanderMass = str(1)
+    Displacement = str(0)
 
-# Construct the SQL command for insertion
-sqlCommand = f"INSERT INTO {table_name} (time_elapsed_sec, altitude, velocity, fuel_mass, lander_mass, displacement) VALUES (?, ?, ?, ?, ?, ?)"
+    # Construct the SQL command for insertion
+    sqlCommand = f"INSERT INTO {table_name} (time_elapsed_sec, altitude, velocity, fuel_mass, lander_mass, displacement) VALUES (?, ?, ?, ?, ?, ?)"
 
-# Execute the insertion with parameterized values
-cursor.execute(sqlCommand, (Time, Altitude, Velocity, Fuel, LanderMass, Displacement))
+    # Execute the insertion with parameterized values
+    cursor.execute(sqlCommand, (Time, Altitude, Velocity, Fuel, LanderMass, Displacement))
 
-# Commit the changes
-dbConnection.commit()
-
-
-
+    # Commit the changes
+    dbConnection.commit()
+    
+    # Close blackboard
+    cursor.close()
+    dbConnection.close()
 
 
 
 
 def getAltitude():
+    global table_name
+
+    # Connect to blackboard
+    dbConnection = sqlite3.connect('blackboard.db')
+    cursor = dbConnection.cursor()
+
     # Value from last row, altitude column
-    sqlCommand = "select altitude from blackboard_display_data"
+    sqlCommand = f"SELECT altitude FROM {table_name} ORDER BY time_elapsed_sec DESC LIMIT 1"
     cursor = dbConnection.execute(sqlCommand)
-    for row in cursor:
-        return row[0]
+    
+    result = 0
+    row = cursor.fetchone()
+    if row:
+        result = row[0]
+
+    # Close blackboard
+    cursor.close()
+    dbConnection.close()
+    
+    print(f"Altitude: {result}")
+    return result
+    
 
 def getVelocity():
+    global table_name
+
+    # Connect to blackboard
+    dbConnection = sqlite3.connect('blackboard.db')
+    cursor = dbConnection.cursor()
+
     # Value from last row, velocity column
-    sqlCommand = "select velocity from blackboard_display_data"
+    sqlCommand = f"select velocity from {table_name}"
     cursor = dbConnection.execute(sqlCommand)
+    
+    result = 0
     for row in cursor:
-        return row[0]
+        result =  row[0]
+
+    # Close blackboard
+    cursor.close()
+    dbConnection.close()
+    
+    print(f"Velocity: {result}")
+    return result
 
 def getFuelMass():
+    global table_name
+
+    # Connect to blackboard
+    dbConnection = sqlite3.connect('blackboard.db')
+    cursor = dbConnection.cursor()
+
     # Value from last row, fuel mass column
-    sqlCommand = "select fuel_mass from blackboard_display_data"
+    sqlCommand = f"select fuel_mass from {table_name}"
     cursor = dbConnection.execute(sqlCommand)
+    
+    result = 0
     for row in cursor:
-        return row[0]
+        result =  row[0]
+
+    # Close blackboard
+    cursor.close()
+    dbConnection.close()
+    
+    print(f"FuelMass: {result}")
+    return result
 
 def getLanderMass():
+    global table_name
+
+    # Connect to blackboard
+    dbConnection = sqlite3.connect('blackboard.db')
+    cursor = dbConnection.cursor()
+
     # Value from last row, lander mass column
-    sqlCommand = "select lander_mass from blackboard_display_data"
+    sqlCommand = f"select lander_mass from {table_name}"
     cursor = dbConnection.execute(sqlCommand)
+    
+    result = 0
     for row in cursor:
-        return row[0]     
+        result =  row[0]
+
+    # Close blackboard
+    cursor.close()
+    dbConnection.close()
+    
+    print(f"LanderMass: {result}")
+    return result   
 
 def getTotalMass():
+    global table_name
+
+    # Connect to blackboard
+    dbConnection = sqlite3.connect('blackboard.db')
+    cursor = dbConnection.cursor()
+
     # Value from last row, total mass column
-    sqlCommand = "select total_mass from blackboard_display_data"
+    sqlCommand = f"select total_mass from {table_name}"
     cursor = dbConnection.execute(sqlCommand)
+    
+    result = 0
     for row in cursor:
-        return row[0]
+        result =  row[0]
+
+    # Close blackboard
+    cursor.close()
+    dbConnection.close()
+    
+    print(f"TotalMass: {result}")
+    return result
 
 def AddRow(time_elapsed, h, v, m_fuel, m_lander, m_total, displacement):
+    global table_name
+
+    # Connect to blackboard
+    dbConnection = sqlite3.connect('blackboard.db')
+
     # Add new row to DB with this data
     value1 = str(time_elapsed)
     value2 = str(h)
@@ -96,9 +181,12 @@ def AddRow(time_elapsed, h, v, m_fuel, m_lander, m_total, displacement):
     value5 = str(m_lander)
     value6 = str(m_total)
     value7 = str(displacement)
-    sqlCommand = "insert into blackboard_display_data values" + "(\"" + value1 + "\", \"" + value2 + "\", " + value3 + ", " + value4 + ", " + value5 + ", " + value6 + ", " + value7 + ")"
+    sqlCommand = f"insert into {table_name} values" + "(\"" + value1 + "\", \"" + value2 + "\", " + value3 + ", " + value4 + ", " + value5 + ", " + value6 + ", " + value7 + ")"
     dbConnection.execute(sqlCommand)
     dbConnection.commit()
+    
+    # Close blackboard
+    dbConnection.close()
 
 
 # DB
@@ -122,6 +210,3 @@ def AddRow(time_elapsed, h, v, m_fuel, m_lander, m_total, displacement):
 # There should be a method to set them all
 # There should be methods to get each individualy (Latest value for now)
   
-# Close blackboard
-cursor.close()
-dbConnection.close()

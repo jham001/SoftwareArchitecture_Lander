@@ -4,6 +4,7 @@
 # libraries
 import PySimpleGUI as psg
 from random import randrange
+import lander_Physics as physics
 
 # variables
 startingHeight = 100000
@@ -14,6 +15,7 @@ Ivelocity = 200
 IimpactTime = 100
 thrusterToggle = False
 parachuteReleased = False
+physics.newTable() # Make a new blackboard for trial
 
 # set theme
 psg.theme('DarkBlue13')
@@ -70,37 +72,48 @@ def is_thrust_on():
     return thrusterToggle
 
 # functions we call every 1 second
-def updateAltitude():
+def updateAltitude(thrusterToggle):
     # get new altitude
-    altitude = 42
+        #altitude = 42
+    altitude = physics.getCurrentAltitude(thrusterToggle)
     # update altitude
     window['altitudetxt'].update(str(altitude) + " m")
+    
 def updateFuel():
     # get new fuel
-    fuel = 69
+        #fuel = 69
+    fuel = physics.getFuel()
     # update fuel
     window['fueltxt'].update(str(fuel) + " kg")
+    
 def updateWeight():
     # get new weight
-    weight = 96
+        #weight = 96
+    weight = physics.getMass()
     # update weight
     window['weighttxt'].update(str(weight) + " kg")
-def updateVelocity():
+    
+def updateVelocity(thrusterToggle):
     # get new velocity
-    velocity = 456
+        #velocity = 456
+    velocity = physics.getCurrentLanderVelocity(thrusterToggle)
     # update velocity
     window['velocitytxt'].update(str(velocity) + " m/s")
+    
 def updateImpactTime():
     # get new impact time
-    impactTime = 789
+        #impactTime = 789
+    impactTime = physics.getImpactTime()
     # update impact time
     window['impacttimetxt'].update(str(impactTime) + " s")
-def moveRocket():
+    
+def moveRocket(thrusterToggle):
     # get change in position
-    if thrusterToggle == True:
-        positionChange = -200
-    else:
-        positionChange = -400
+    #if thrusterToggle == True:
+    #    positionChange = -200
+    #else:
+    #    positionChange = -400
+    positionChange = physics.getDisplacement(thrusterToggle)
     # update visual position of rocket
     graph.MoveFigure(rocketTop, 0, positionChange)
     graph.MoveFigure(rocketMiddle, 0, positionChange)
@@ -122,11 +135,11 @@ while True:
         parachuteReleased = True
     
     # call functions
-    updateAltitude()
+    updateAltitude(thrusterToggle)
     updateFuel()
     updateWeight()
-    updateVelocity()
+    updateVelocity(thrusterToggle)
     updateImpactTime()
-    moveRocket()
+    moveRocket(thrusterToggle)
     
 window.close()
