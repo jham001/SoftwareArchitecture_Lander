@@ -19,17 +19,21 @@ def getGravitationalAcceleration():
 # get current acceleration
 def getCurrentAcceleration(thrusterToggle):
     # Net Force= Force of thrust - Force of gravity
-    F_Thrust = 16000 * thrusterToggle # (N)
+    F_Thrust = 16000 * thrusterToggle # (N) 
     g_moon = getGravitationalAcceleration() # (t)
     m_lander = lander_Backend.getLanderMass() # (kg)
     m_fuel = lander_Backend.getFuelMass() # (kg)
 
-    F_g = g_moon * m_lander
+    total_mass = m_lander + m_fuel
+    specificImpulse = 311
+    consumption = F_Thrust*dt/specificImpulse
+    consumption = 10
+
+    F_g = g_moon * total_mass
     Force_Net = F_Thrust - F_g
 
-
     if (m_lander - 0.5 * m_fuel) != 0:
-        a_t = Force_Net / (m_lander - 0.5 * m_fuel) 
+        a_t = Force_Net / (m_lander - 0.5 * consumption) 
         return a_t
 
 
@@ -86,8 +90,8 @@ def getDisplacement(thrusterToggle):
     displacement = h - h_old # (m)
     return displacement
 
-def newTable(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange):
-    lander_Backend.newTable(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange)
+def newTable(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange, acceleration):
+    lander_Backend.newTable(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange, acceleration)
     
-def addRow(time_elapsed, h, v, m_fuel, m_lander, displacement):
-    lander_Backend.addRow(time_elapsed, h, v, m_fuel, m_lander, displacement)
+def addRow(time_elapsed, h, v, m_fuel, m_lander, displacement, acceleration):
+    lander_Backend.addRow(time_elapsed, h, v, m_fuel, m_lander, displacement, acceleration)

@@ -10,17 +10,19 @@ import lander_Physics as physics
 time_elapsed = 0
 startingHeight = 100000 # m
 altitude = startingHeight
-m_fuel = 4000 # kg
-m_lander = 5000 # kg
+m_fuel = 6000 # kg 4000  8165 + 2268
+m_lander = 6000 # 5000  kg 2152 + 2353
 velocity = -200 # m/s
 positionChange = 0 # m
 impactTime = 100 # s
+acceleration = -2.607 # m/s^2
 thrusterToggle = False
 parachuteReleased = False
-physics.newTable(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange) # Make a new blackboard for trial
+physics.newTable(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange, acceleration) # Make a new blackboard for trial
     
 isRunning = True
-speed = 10 #1000 is 1 sec (default)
+speed = 50 #1000 is 1 sec (default)
+autoFuelAltitude = 0 # Set altitude for fuel to activate
 
 # set theme
 psg.theme('DarkBlue13')
@@ -93,8 +95,9 @@ def updateWeight():
 
     # get new weight
     m_lander = physics.getMass()
+    total_mass = m_lander + m_fuel
     # update weight
-    window['weighttxt'].update(str(round(m_lander, 2)) + " kg")
+    window['weighttxt'].update(str(round(total_mass, 2)) + " kg")
     
 def updateVelocity(thrusterToggle):
     global velocity
@@ -149,32 +152,33 @@ while isRunning:
     if event == psg.TIMEOUT_KEY:
         pass # user didn't do anything
     
+    if altitude < autoFuelAltitude:
+        thrusterToggle = True
+     
     if m_fuel < 51:
         thrusterToggle = False
     elif event == 'Thrusters': # Thruster button pushed
         thrusterToggle = not thrusterToggle
-        
+       
     if event == 'Parachute': # Parachute button pushed
         parachuteReleased = True
     
     # call functions
     updateAltitude(thrusterToggle)
-    updateWeight()
     updateVelocity(thrusterToggle)
     updateImpactTime()
     moveRocket(thrusterToggle)
-    
+    acceleration = physics.getCurrentAcceleration(thrusterToggle)
+
     if (thrusterToggle):
         updateFuel()
+        
+    updateWeight()
 
     collisionCheck()
 
     time_elapsed += 1
     print(time_elapsed)
-    physics.addRow(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange)
+    physics.addRow(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange, acceleration)
     
 window.close()
-
-
-
-#If fuel < 1, cant use it anymore.
