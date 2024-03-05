@@ -58,6 +58,8 @@ rocketMiddle = graph.DrawRectangle((startingHeight/6-500, startingHeight + 1000)
 rocketBottom = graph.DrawPolygon(((startingHeight/6-900, startingHeight - 1600),
     (startingHeight/6, startingHeight + 1800), (startingHeight/6+950, startingHeight - 1600),
     (startingHeight/6, startingHeight-1100)), fill_color='blue', line_color='#ECDEC9')
+flame = graph.DrawOval((startingHeight/6-300,startingHeight-1000),
+    (startingHeight/6+300, startingHeight-2800), fill_color="red", line_color="black")
 moon = graph.draw_rectangle(((startingHeight/3),(startingHeight/30)),
     (0,(-startingHeight/30)), line_color='grey', fill_color='grey')
 for stars in range(300):
@@ -124,6 +126,15 @@ def moveRocket(thrusterToggle):
     graph.MoveFigure(rocketTop, 0, positionChange)
     graph.MoveFigure(rocketMiddle, 0, positionChange)
     graph.MoveFigure(rocketBottom, 0, positionChange)
+    graph.MoveFigure(flame, 0, positionChange)
+def updateFlame(thrusterToggle):
+    # make flame red if thrusters on or invisibly black if off
+    if thrusterToggle:
+        graph.Widget.itemconfig(flame, fill="red")
+        graph.bring_figure_to_front(flame)
+    else:
+        graph.Widget.itemconfig(flame, fill="black")
+        graph.send_figure_to_back(flame)
 
 def collisionCheck():
     global velocity
@@ -168,6 +179,7 @@ while isRunning:
     updateVelocity(thrusterToggle)
     updateImpactTime()
     moveRocket(thrusterToggle)
+    updateFlame(thrusterToggle)
     acceleration = physics.getCurrentAcceleration(thrusterToggle)
 
     if (thrusterToggle):
