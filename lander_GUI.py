@@ -8,7 +8,8 @@ import lander_Physics as physics
 
 # variables
 time_elapsed = 0
-startingHeight = 100000 # m
+startingHeight = 50000 # m
+screenHeight = 100000 # m
 altitude = startingHeight
 m_fuel = 3000 # kg 4000  8165 + 2268
 m_lander = 3000 # 5000  kg 2152 + 2353
@@ -29,7 +30,7 @@ psg.theme('DarkBlue13')
 
 # graph setup
 graph=psg.Graph(canvas_size=(300,900), graph_bottom_left=(0, -1000),
-    graph_top_right=((startingHeight/3), (startingHeight+startingHeight/80)),
+    graph_top_right=((screenHeight/3), (screenHeight+screenHeight/80)),
     background_color='black', enable_events=True, drag_submits=True, key='graph')
 # column1 setup with text and buttons
 column1 = [
@@ -51,24 +52,24 @@ layout = [[psg.Column(column1), psg.VSeparator(), psg.Column(column2)]]
 window = psg.Window('Penguin Lander', layout, finalize=True)
 
 # objects on the graph
-rocketTop = graph.DrawPolygon(((startingHeight/6-500, startingHeight + 1000),
-    (startingHeight/6+500, startingHeight + 1000), (startingHeight/6, startingHeight + 1800)),
+rocketTop = graph.DrawPolygon(((screenHeight/6-500, startingHeight + 1000),
+    (screenHeight/6+500, startingHeight + 1000), (screenHeight/6, startingHeight + 1800)),
     fill_color='blue', line_color='#ECDEC9')
-rocketMiddle = graph.DrawRectangle((startingHeight/6-500, startingHeight + 1000),
-    (startingHeight/6+500, startingHeight-1000), fill_color='blue', line_color='#ECDEC9')
-rocketBottom = graph.DrawPolygon(((startingHeight/6-900, startingHeight - 1600),
-    (startingHeight/6, startingHeight + 1800), (startingHeight/6+950, startingHeight - 1600),
-    (startingHeight/6, startingHeight-1100)), fill_color='blue', line_color='#ECDEC9')
-flame = graph.DrawOval((startingHeight/6-300,startingHeight-1000),
-    (startingHeight/6+300, startingHeight-2800), fill_color="red", line_color="black")
-moon = graph.draw_rectangle(((startingHeight/3),(startingHeight/30)),
-    (0,(-startingHeight/30)), line_color='grey', fill_color='grey')
+rocketMiddle = graph.DrawRectangle((screenHeight/6-500, startingHeight + 1000),
+    (screenHeight/6+500, startingHeight-1000), fill_color='blue', line_color='#ECDEC9')
+rocketBottom = graph.DrawPolygon(((screenHeight/6-900, startingHeight - 1600),
+    (screenHeight/6, startingHeight + 1800), (screenHeight/6+950, startingHeight - 1600),
+    (screenHeight/6, startingHeight-1100)), fill_color='blue', line_color='#ECDEC9')
+flame = graph.DrawOval((screenHeight/6-300,startingHeight-1000),
+    (screenHeight/6+300, startingHeight-2800), fill_color="red", line_color="black")
+moon = graph.draw_rectangle(((screenHeight/3),(screenHeight/30)),
+    (0,(-screenHeight/30)), line_color='grey', fill_color='grey')
 for stars in range(300):
-    x,y = randrange(int(startingHeight/3)), randrange(int(startingHeight))
-    star = graph.draw_circle((x, y), startingHeight/1000, line_color='white',  fill_color='white')
+    x,y = randrange(int(screenHeight/3)), randrange(int(screenHeight))
+    star = graph.draw_circle((x, y), screenHeight/1000, line_color='white',  fill_color='white')
     graph.send_figure_to_back(star)
 for craters in range(35):
-    x,y = randrange(int(startingHeight/3)), startingHeight/40-randrange(int(startingHeight/30))
+    x,y = randrange(int(screenHeight/3)), screenHeight/40-randrange(int(screenHeight/30))
     crater = graph.draw_circle((x, y), (randrange(int(6))+3)*100,
         line_color='#333333',  fill_color='#767676')
 
@@ -167,9 +168,9 @@ while isRunning:
 
     # Automated Landing
     if automatedLanding == True:
-        if (velocity < (-1200 * ((altitude+2000)/startingHeight))*0.60):
+        if (velocity < (-1200 * ((altitude+2000)/screenHeight))*0.60):
             thrusterToggle = True
-        elif ((altitude < 100) & (velocity < -5)):
+        elif ((altitude < 100) & (velocity < -6)):
             thrusterToggle = True
         else:
             thrusterToggle = False
