@@ -23,7 +23,7 @@ def getCurrentAcceleration(thrusterToggle):
     total_mass = m_lander + m_fuel # (kg)
     consumption = 10 # (kg/s)
 
-    return (F_Thrust/(m_lander - 0.5 * consumption)) - g_moon # (m/s^2)
+    return (F_Thrust/(total_mass - 0.5 * consumption)) - g_moon # (m/s^2)
 
 
 # Current Lander Velocity

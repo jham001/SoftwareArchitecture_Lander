@@ -10,7 +10,7 @@ import lander_Physics as physics
 time_elapsed = 0
 startingHeight = 100000 # m
 altitude = startingHeight
-m_fuel = 2000 # kg 4000  8165 + 2268
+m_fuel = 3000 # kg 4000  8165 + 2268
 m_lander = 3000 # 5000  kg 2152 + 2353
 velocity = -200 # m/s
 positionChange = 0 # m
@@ -167,7 +167,7 @@ while isRunning:
 
     # Automated Landing
     if automatedLanding == True:
-        if (velocity < (-1200 * ((altitude+2000)/startingHeight)) + 000 ):
+        if (velocity < (-1200 * ((altitude+2000)/startingHeight))*0.60):
             thrusterToggle = True
         elif ((altitude < 100) & (velocity < -5)):
             thrusterToggle = True
