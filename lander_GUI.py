@@ -10,19 +10,19 @@ import lander_Physics as physics
 time_elapsed = 0
 startingHeight = 100000 # m
 altitude = startingHeight
-m_fuel = 6000 # kg 4000  8165 + 2268
-m_lander = 6000 # 5000  kg 2152 + 2353
+m_fuel = 2000 # kg 4000  8165 + 2268
+m_lander = 3000 # 5000  kg 2152 + 2353
 velocity = -200 # m/s
 positionChange = 0 # m
 impactTime = 100 # s
 acceleration = -2.607 # m/s^2
 thrusterToggle = False
 parachuteReleased = False
+automatedLanding = False
 physics.newTable(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange, acceleration) # Make a new blackboard for trial
-    
+
 isRunning = True
 speed = 50 #1000 is 1 sec (default)
-autoFuelAltitude = 0 # Set altitude for fuel to activate
 
 # set theme
 psg.theme('DarkBlue13')
@@ -40,6 +40,7 @@ column1 = [
     [psg.Text("Time until Impact:"), psg.Text(str(impactTime) + " s", key="impacttimetxt")],
     [psg.Button("Thrusters")],
     [psg.Button("Parachute")],
+    [psg.Button("Automated Landing")],
 ]
 # column2 setup with graph and anything else we want to add
 column2 = [
@@ -142,7 +143,7 @@ def collisionCheck():
     global isRunning
     
     if (altitude < 0):
-        if (-velocity < 5):
+        if (velocity > -5):
             #YAY
             print("YOU WIN")
         else:
@@ -163,16 +164,29 @@ while isRunning:
     if event == psg.TIMEOUT_KEY:
         pass # user didn't do anything
     
-    if altitude < autoFuelAltitude:
-        thrusterToggle = True
-     
-    if m_fuel < 51:
+
+    # Automated Landing
+    if automatedLanding == True:
+        if (velocity < (-1200 * ((altitude+2000)/startingHeight)) + 000 ):
+            thrusterToggle = True
+        elif ((altitude < 100) & (velocity < -5)):
+            thrusterToggle = True
+        else:
+            thrusterToggle = False
+    
+
+
+
+    if m_fuel < 10:
         thrusterToggle = False
     elif event == 'Thrusters': # Thruster button pushed
         thrusterToggle = not thrusterToggle
        
     if event == 'Parachute': # Parachute button pushed
         parachuteReleased = True
+        
+    if event == 'Automated Landing': # Automated Landing button pushed
+        automatedLanding = not automatedLanding
     
     # call functions
     updateAltitude(thrusterToggle)
