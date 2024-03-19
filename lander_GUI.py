@@ -6,6 +6,10 @@ import PySimpleGUI as psg
 from random import randrange
 import lander_Physics as physics
 
+#music
+import winsound
+winsound.PlaySound("holst_mars.wav", winsound.SND_ASYNC | winsound.SND_ALIAS )
+
 # variables
 time_elapsed = 0
 startingHeight = 100000 # m
@@ -23,7 +27,7 @@ automatedLanding = False
 physics.newTable(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange, acceleration, impactTime) # Make a new blackboard for trial
 
 isRunning = True
-speed = 30 #1000 is 1 sec (default)
+speed = 100 #1000 is 1 sec (default)
 
 # set theme
 psg.theme('DarkBlue13')
