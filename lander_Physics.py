@@ -65,10 +65,13 @@ def getMass():
 def getImpactTime():
     altitude = lander_Backend.getAltitude() # (m)
     velocity = lander_Backend.getVelocity() # (m/s)
-    gravitational_acceleration = getGravitationalAcceleration() # (m/s^2)
+    gravitational_acceleration = lander_Backend.getAcceleration() # (m/s^2)
 
     discriminant = velocity ** 2 + 2 * gravitational_acceleration * altitude
     if discriminant < 0:
+        discriminant = velocity ** 2 - 2 * gravitational_acceleration * altitude
+        time = (-velocity - math.sqrt(discriminant)) / gravitational_acceleration
+        return time
         return 999  # No real solution (lander will never hit the surface)
     else:
         time = (velocity + math.sqrt(discriminant)) / gravitational_acceleration
