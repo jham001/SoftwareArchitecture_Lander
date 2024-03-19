@@ -3,7 +3,7 @@ import sqlite3
 
 table_name = f""  # Declare table_name as a global variable
 
-def newTable(time_elapsed, h, v, m_fuel, m_lander, displacement, acceleration):
+def newTable(time_elapsed, h, v, m_fuel, m_lander, displacement, acceleration, impactTime):
     global table_name  # Declare that you are modifying the global variable within this function
 
     # Connect to blackboard
@@ -30,7 +30,8 @@ def newTable(time_elapsed, h, v, m_fuel, m_lander, displacement, acceleration):
     fuel_mass float,
     lander_mass float,
     displacement float,
-    acceleration float               
+    acceleration float,
+    time_till_impact float
     );''')
 
     # Add Initial values
@@ -41,12 +42,13 @@ def newTable(time_elapsed, h, v, m_fuel, m_lander, displacement, acceleration):
     LanderMass = m_lander
     Displacement = displacement
     Acceleration = acceleration
+    TTI = impactTime
 
     # Construct the SQL command for insertion
-    sqlCommand = f"INSERT INTO {table_name} (time_elapsed_sec, altitude, velocity, fuel_mass, lander_mass, displacement, acceleration) VALUES (?, ?, ?, ?, ?, ?, ?)"
+    sqlCommand = f"INSERT INTO {table_name} (time_elapsed_sec, altitude, velocity, fuel_mass, lander_mass, displacement, acceleration, time_till_impact) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
 
     # Execute the insertion with parameterized values
-    cursor.execute(sqlCommand, (Time, Altitude, Velocity, Fuel, LanderMass, Displacement, Acceleration))
+    cursor.execute(sqlCommand, (Time, Altitude, Velocity, Fuel, LanderMass, Displacement, Acceleration, TTI))
 
     # Commit the changes
     dbConnection.commit()
@@ -165,7 +167,7 @@ def getTotalMass():
 
     return result
 
-def addRow(time_elapsed, h, v, m_fuel, m_lander, displacement, acceleration):
+def addRow(time_elapsed, h, v, m_fuel, m_lander, displacement, acceleration, impactTime):
     global table_name
 
     # Connect to blackboard
@@ -181,12 +183,13 @@ def addRow(time_elapsed, h, v, m_fuel, m_lander, displacement, acceleration):
     LanderMass = m_lander
     Displacement = displacement
     Acceleration = acceleration
+    TTI = impactTime
 
     # Construct the SQL command for insertion
-    sqlCommand = f"INSERT INTO {table_name} (time_elapsed_sec, altitude, velocity, fuel_mass, lander_mass, displacement, acceleration) VALUES (?, ?, ?, ?, ?, ?, ?)"
+    sqlCommand = f"INSERT INTO {table_name} (time_elapsed_sec, altitude, velocity, fuel_mass, lander_mass, displacement, acceleration, time_till_impact) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
 
     # Execute the insertion with parameterized values
-    cursor.execute(sqlCommand, (Time, Altitude, Velocity, Fuel, LanderMass, Displacement, Acceleration))
+    cursor.execute(sqlCommand, (Time, Altitude, Velocity, Fuel, LanderMass, Displacement, Acceleration, TTI))
     dbConnection.commit()
     
     # Close blackboard

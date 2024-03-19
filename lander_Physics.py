@@ -84,8 +84,8 @@ def getDisplacement(thrusterToggle):
     displacement = h - h_old # (m)
     return displacement
 
-def newTable(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange, acceleration):
-    lander_Backend.newTable(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange, acceleration)
+def newTable(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange, acceleration, impactTime):
+    lander_Backend.newTable(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange, acceleration, impactTime)
     
-def addRow(time_elapsed, h, v, m_fuel, m_lander, displacement, acceleration):
-    lander_Backend.addRow(time_elapsed, h, v, m_fuel, m_lander, displacement, acceleration)
+def addRow(time_elapsed, h, v, m_fuel, m_lander, displacement, acceleration, impactTime):
+    lander_Backend.addRow(time_elapsed, h, v, m_fuel, m_lander, displacement, acceleration, impactTime)

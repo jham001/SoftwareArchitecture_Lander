@@ -20,10 +20,10 @@ acceleration = -2.607 # m/s^2
 thrusterToggle = False
 parachuteReleased = False
 automatedLanding = False
-physics.newTable(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange, acceleration) # Make a new blackboard for trial
+physics.newTable(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange, acceleration, impactTime) # Make a new blackboard for trial
 
 isRunning = True
-speed = 50 #1000 is 1 sec (default)
+speed = 30 #1000 is 1 sec (default)
 
 # set theme
 psg.theme('DarkBlue13')
@@ -171,15 +171,13 @@ while isRunning:
         window['automatedlandingdot'].draw_circle((10, 10), 10, fill_color='green')
         if (velocity < (-1200 * ((altitude+2000)/screenHeight))*0.60):
             thrusterToggle = True
-        elif ((altitude < 100) & (velocity < -6)):
+        elif ((altitude < 100) & (velocity < -5)):
             thrusterToggle = True
         else:
             thrusterToggle = False
     else:
         window['automatedlandingdot'].draw_circle((10, 10), 10, fill_color='red')
     
-
-
 
     if m_fuel < 10:
         thrusterToggle = False
@@ -212,6 +210,6 @@ while isRunning:
 
     time_elapsed += 1
     print(time_elapsed)
-    physics.addRow(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange, acceleration)
+    physics.addRow(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange, acceleration, impactTime)
     
 window.close()
