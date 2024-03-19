@@ -1,5 +1,5 @@
 import lander_Backend
-
+import math
 
 # Gravitational Acceleration
 def getGravitationalAcceleration():
@@ -63,7 +63,16 @@ def getMass():
     return lander_Backend.getLanderMass()
 
 def getImpactTime():
-    return 1
+    altitude = lander_Backend.getAltitude() # (m)
+    velocity = lander_Backend.getVelocity() # (m/s)
+    gravitational_acceleration = getGravitationalAcceleration() # (m/s^2)
+
+    discriminant = velocity ** 2 + 2 * gravitational_acceleration * altitude
+    if discriminant < 0:
+        return 999  # No real solution (lander will never hit the surface)
+    else:
+        time = (velocity + math.sqrt(discriminant)) / gravitational_acceleration
+        return time
 
 def getDisplacement(thrusterToggle):
     h_old = lander_Backend.getAltitude() # (m)
