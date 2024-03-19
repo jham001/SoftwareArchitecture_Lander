@@ -8,7 +8,7 @@ import lander_Physics as physics
 
 # variables
 time_elapsed = 0
-startingHeight = 50000 # m
+startingHeight = 100000 # m
 screenHeight = 100000 # m
 altitude = startingHeight
 m_fuel = 3000 # kg 4000  8165 + 2268
@@ -39,9 +39,9 @@ column1 = [
     [psg.Text("Total Weight:"), psg.Text(str(m_lander) + " kg", key="weighttxt")],
     [psg.Text("Velocity:"), psg.Text(str(velocity) + " m/s", key="velocitytxt")],
     [psg.Text("Time until Impact:"), psg.Text(str(impactTime) + " s", key="impacttimetxt")],
-    [psg.Button("Thrusters")],
-    [psg.Button("Parachute")],
-    [psg.Button("Automated Landing")],
+    [psg.Graph((20, 20), (0, 0), (20, 20), key="thrustersdot"), psg.Button("Thrusters")],
+    [psg.Graph((20, 20), (0, 0), (20, 20), key="parachutesdot"), psg.Button("Parachute")],
+    [psg.Graph((20, 20), (0, 0), (20, 20), key="automatedlandingdot"), psg.Button("Automated Landing")],
 ]
 # column2 setup with graph and anything else we want to add
 column2 = [
@@ -168,12 +168,15 @@ while isRunning:
 
     # Automated Landing
     if automatedLanding == True:
+        window['automatedlandingdot'].draw_circle((10, 10), 10, fill_color='green')
         if (velocity < (-1200 * ((altitude+2000)/screenHeight))*0.60):
             thrusterToggle = True
         elif ((altitude < 100) & (velocity < -6)):
             thrusterToggle = True
         else:
             thrusterToggle = False
+    else:
+        window['automatedlandingdot'].draw_circle((10, 10), 10, fill_color='red')
     
 
 
@@ -198,7 +201,10 @@ while isRunning:
     acceleration = physics.getCurrentAcceleration(thrusterToggle)
 
     if (thrusterToggle):
+        window['thrustersdot'].draw_circle((10, 10), 10, fill_color='green')
         updateFuel()
+    else:
+        window['thrustersdot'].draw_circle((10, 10), 10, fill_color='red')
         
     updateWeight()
 
