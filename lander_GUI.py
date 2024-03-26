@@ -27,7 +27,7 @@ automatedLanding = False
 physics.newTable(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange, acceleration, impactTime) # Make a new blackboard for trial
 
 isRunning = True
-speed = 10 #100 #1000 is 1 sec (default)
+speed = 2 #100 #1000 is 1 sec (default)
 
 # set theme
 psg.theme('DarkBlue13')
@@ -58,16 +58,16 @@ window = psg.Window('Penguin Lander', layout, finalize=True)
 # objects on the graph
 rocketTop = graph.DrawPolygon(((screenHeight/6-500, startingHeight + 2000),
     (screenHeight/6+500, startingHeight + 2000), (screenHeight/6, startingHeight + 2800)),
-    fill_color='blue', line_color='#ECDEC9')
+    fill_color='blue', line_color='#7184a8')
 rocketMiddle = graph.DrawRectangle((screenHeight/6-500, startingHeight + 2000),
-    (screenHeight/6+500, startingHeight), fill_color='blue', line_color='#ECDEC9')
+    (screenHeight/6+500, startingHeight), fill_color='blue', line_color='#7184a8')
 rocketBottom = graph.DrawPolygon(((screenHeight/6-900, startingHeight - 600),
-    (screenHeight/6, startingHeight + 1800), (screenHeight/6+950, startingHeight - 600),
-    (screenHeight/6, startingHeight-100)), fill_color='blue', line_color='#ECDEC9')
+    (screenHeight/6, startingHeight + 2500), (screenHeight/6+950, startingHeight - 600),
+    (screenHeight/6, startingHeight-100)), fill_color='blue', line_color='#7184a8')
 flame = graph.DrawOval((screenHeight/6-300,startingHeight),
     (screenHeight/6+300, startingHeight-1800), fill_color="red", line_color="black")
 moon = graph.draw_rectangle(((screenHeight/3),(screenHeight/30)),
-    (0,(-screenHeight/30)), line_color='grey', fill_color='grey')
+    (0,(-screenHeight/30)), line_color='#767676', fill_color='#767676')
 for stars in range(300):
     x,y = randrange(int(screenHeight/3)), randrange(int(screenHeight))
     star = graph.draw_circle((x, y), screenHeight/1000, line_color='white',  fill_color='white')
@@ -75,7 +75,7 @@ for stars in range(300):
 for craters in range(35):
     x,y = randrange(int(screenHeight/3)), screenHeight/40-randrange(int(screenHeight/30))
     crater = graph.draw_circle((x, y), (randrange(int(6))+3)*100,
-        line_color='#333333',  fill_color='#767676')
+        line_color='#444444',  fill_color='#676767')
 
 # put shapes in right layers
 graph.bring_figure_to_front(rocketBottom)
@@ -150,10 +150,14 @@ def collisionCheck():
     if (altitude < 0):
         if (velocity > -5):
             #YAY
-            print("YOU WIN")
+            endText = "YOU WIN!"
         else:
             #CRASH
-            print("YOU DIED!")
+            endText = "YOU DIED!"
+            #BOOM
+            graph.DrawCircle((screenHeight/6,0), 5000, fill_color="red", line_color="orange", line_width=10)
+        print(endText)
+        psg.popup_ok(endText, title="Game Over")
         isRunning = False
         
 
