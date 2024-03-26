@@ -27,7 +27,7 @@ automatedLanding = False
 physics.newTable(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange, acceleration, impactTime) # Make a new blackboard for trial
 
 isRunning = True
-speed = 100 #1000 is 1 sec (default)
+speed = 10 #100 #1000 is 1 sec (default)
 
 # set theme
 psg.theme('DarkBlue13')
@@ -56,16 +56,16 @@ layout = [[psg.Column(column1), psg.VSeparator(), psg.Column(column2)]]
 window = psg.Window('Penguin Lander', layout, finalize=True)
 
 # objects on the graph
-rocketTop = graph.DrawPolygon(((screenHeight/6-500, startingHeight + 1000),
-    (screenHeight/6+500, startingHeight + 1000), (screenHeight/6, startingHeight + 1800)),
+rocketTop = graph.DrawPolygon(((screenHeight/6-500, startingHeight + 2000),
+    (screenHeight/6+500, startingHeight + 2000), (screenHeight/6, startingHeight + 2800)),
     fill_color='blue', line_color='#ECDEC9')
-rocketMiddle = graph.DrawRectangle((screenHeight/6-500, startingHeight + 1000),
-    (screenHeight/6+500, startingHeight-1000), fill_color='blue', line_color='#ECDEC9')
-rocketBottom = graph.DrawPolygon(((screenHeight/6-900, startingHeight - 1600),
-    (screenHeight/6, startingHeight + 1800), (screenHeight/6+950, startingHeight - 1600),
-    (screenHeight/6, startingHeight-1100)), fill_color='blue', line_color='#ECDEC9')
-flame = graph.DrawOval((screenHeight/6-300,startingHeight-1000),
-    (screenHeight/6+300, startingHeight-2800), fill_color="red", line_color="black")
+rocketMiddle = graph.DrawRectangle((screenHeight/6-500, startingHeight + 2000),
+    (screenHeight/6+500, startingHeight), fill_color='blue', line_color='#ECDEC9')
+rocketBottom = graph.DrawPolygon(((screenHeight/6-900, startingHeight - 600),
+    (screenHeight/6, startingHeight + 1800), (screenHeight/6+950, startingHeight - 600),
+    (screenHeight/6, startingHeight-100)), fill_color='blue', line_color='#ECDEC9')
+flame = graph.DrawOval((screenHeight/6-300,startingHeight),
+    (screenHeight/6+300, startingHeight-1800), fill_color="red", line_color="black")
 moon = graph.draw_rectangle(((screenHeight/3),(screenHeight/30)),
     (0,(-screenHeight/30)), line_color='grey', fill_color='grey')
 for stars in range(300):
