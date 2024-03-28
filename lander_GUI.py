@@ -60,6 +60,11 @@ column2 = [
 layout = [[psg.Column(column1), psg.VSeparator(), psg.Column(column2)]]
 window = psg.Window('Penguin Lander', layout, finalize=True)
 
+# bind keys
+window.bind('<space>', 'Thrusters')
+window.bind('<p>', 'Parachute')
+window.bind('<a>', 'Automated Landing')
+
 # objects on the graph
 rocketTop = graph.DrawPolygon(((screenHeight/6-500, startingHeight + 2000),
     (screenHeight/6+500, startingHeight + 2000), (screenHeight/6, startingHeight + 2800)),
