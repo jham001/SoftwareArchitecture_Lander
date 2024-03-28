@@ -4,11 +4,11 @@
 # libraries
 import PySimpleGUI as psg
 from random import randrange
-import lander_Physics as physics
+import lander_Physics as controller
 
 #music
 import winsound
-winsound.PlaySound("holst_mars.wav", winsound.SND_ASYNC | winsound.SND_ALIAS )
+#winsound.PlaySound("holst_mars.wav", winsound.SND_ASYNC | winsound.SND_ALIAS )
 
 # variables
 time_elapsed = 0
@@ -24,10 +24,15 @@ acceleration = -2.607 # m/s^2
 thrusterToggle = False
 parachuteReleased = False
 automatedLanding = False
-physics.newTable(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange, acceleration, impactTime) # Make a new blackboard for trial
+
+moon = controller.Planet(6.67430*10**(-11), 7.34767309*10**22, 1740000.0)
+rocket = controller.Lander(altitude = startingHeight, velocity = velocity, mass_fuel = m_fuel, mass_lander = m_lander, F_thrust = 16000, fuel_consumption = 10, planet = moon)
+
+rocket.newTable(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange, acceleration, impactTime) # Make a new blackboard for trial
 
 isRunning = True
-speed = 2 #100 #1000 is 1 sec (default)
+speed = 100 #1000 is 1 sec (default)
+
 
 # set theme
 psg.theme('DarkBlue13')
@@ -84,50 +89,32 @@ graph.bring_figure_to_front(rocketMiddle)
 
 # functions we call every 1 second
 def updateAltitude(thrusterToggle):
-    global altitude
-
-    # get new altitude
-    altitude = physics.getCurrentAltitude(thrusterToggle)
+    altitude = rocket.getCurrentAltitude(thrusterToggle)
     # update altitude
     window['altitudetxt'].update(str(round(altitude, 2)) + " m")
     
 def updateFuel():
-    global m_fuel
-    # get new fuel
-    m_fuel = physics.getFuel()
+    fuel = rocket.getFuel()
     # update fuel
-    window['fueltxt'].update(f"{round(m_fuel, 2):.2f}" + " kg")
+    window['fueltxt'].update(f"{round(fuel, 2):.2f}" + " kg")
     
 def updateWeight():
-    global m_lander
-
-    # get new weight
-    m_lander = physics.getMass()
-    total_mass = m_lander + m_fuel
+    total_mass = rocket.getMass() + m_fuel
     # update weight
     window['weighttxt'].update(str(round(total_mass, 2)) + " kg")
     
 def updateVelocity(thrusterToggle):
-    global velocity
-
-    # get new velocity
-    velocity = physics.getCurrentLanderVelocity(thrusterToggle)
+    velocity = rocket.getCurrentLanderVelocity(thrusterToggle)
     # update velocity
     window['velocitytxt'].update(str(round(velocity, 2)) + " m/s")
     
 def updateImpactTime():
-    global impactTime
-
-    # get new impact time
-    impactTime = physics.getImpactTime()
+    impactTime = rocket.getImpactTime()
     # update impact time
     window['impacttimetxt'].update(str(round(impactTime, 2)) + " s")
     
 def moveRocket(thrusterToggle):
-    global positionChange
-
-    # get change in position
-    positionChange = physics.getDisplacement(thrusterToggle)
+    positionChange = rocket.getDisplacement()
     # update visual position of rocket
     graph.MoveFigure(rocketTop, 0, positionChange)
     graph.MoveFigure(rocketMiddle, 0, positionChange)
@@ -143,8 +130,8 @@ def updateFlame(thrusterToggle):
         graph.send_figure_to_back(flame)
 
 def collisionCheck():
-    global velocity
-    global altitude
+    velocity = rocket.velocity
+    altitude = rocket.altitude
     global isRunning
     
     if (altitude < 0):
@@ -161,6 +148,8 @@ def collisionCheck():
         isRunning = False
         
 
+
+
 # infinite loop
 while isRunning:
     # line 1 of loop waits 1 second and executes
@@ -176,6 +165,9 @@ while isRunning:
 
     # Automated Landing
     if automatedLanding == True:
+        velocity = rocket.velocity
+        altitude = rocket.altitude
+        
         window['automatedlandingdot'].draw_circle((10, 10), 10, fill_color='green')
         if (velocity < (-1200 * ((altitude+2000)/screenHeight))*0.60):
             thrusterToggle = True
@@ -187,7 +179,7 @@ while isRunning:
         window['automatedlandingdot'].draw_circle((10, 10), 10, fill_color='red')
     
 
-    if m_fuel < 10:
+    if rocket.mass_fuel < 10:
         thrusterToggle = False
     elif event == 'Thrusters': # Thruster button pushed
         thrusterToggle = not thrusterToggle
@@ -197,14 +189,15 @@ while isRunning:
         
     if event == 'Automated Landing': # Automated Landing button pushed
         automatedLanding = not automatedLanding
-    
+
+
     # call functions
     updateAltitude(thrusterToggle)
     updateVelocity(thrusterToggle)
     updateImpactTime()
     moveRocket(thrusterToggle)
     updateFlame(thrusterToggle)
-    acceleration = physics.getCurrentAcceleration(thrusterToggle)
+    acceleration = rocket.getCurrentAcceleration(thrusterToggle)
 
     if (thrusterToggle):
         window['thrustersdot'].draw_circle((10, 10), 10, fill_color='green')
@@ -217,7 +210,6 @@ while isRunning:
     collisionCheck()
 
     time_elapsed += 1
-    print(time_elapsed)
-    physics.addRow(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange, acceleration, impactTime)
+    rocket.addRow(time_elapsed)
     
 window.close()
