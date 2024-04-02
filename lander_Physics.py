@@ -40,12 +40,12 @@ class Lander:
 
 
     # Current Lander Velocity
-    def getCurrentLanderVelocity(self, thrusterToggle):
+    def getCurrentLanderVelocity(self):
         dt = 1 # (sec)
 
         v_old = lander_Backend.getVelocity() # (m/s)
 
-        a_t = self.getCurrentAcceleration(thrusterToggle)
+        a_t = self.acceleration
 
         self.velocity = v_old + a_t * dt
     
@@ -53,12 +53,12 @@ class Lander:
 
 
     # Current Altitude
-    def getCurrentAltitude(self, thrusterToggle):
+    def getCurrentAltitude(self):
         dt = 1 # (sec)
 
         h_old = lander_Backend.getAltitude() # (m)
         v_old = lander_Backend.getVelocity() # (m/s)
-        a_t = self.getCurrentAcceleration(thrusterToggle) # (m/s^2)
+        a_t = self.acceleration # (m/s^2)
 
         self.altitude = h_old + (v_old * dt) + (0.5 * a_t * dt**2)
     

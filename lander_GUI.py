@@ -8,7 +8,7 @@ import lander_Physics as controller
 
 #music
 import winsound
-#winsound.PlaySound("holst_mars.wav", winsound.SND_ASYNC | winsound.SND_ALIAS )
+winsound.PlaySound("holst_mars.wav", winsound.SND_ASYNC | winsound.SND_ALIAS )
 
 # variables
 time_elapsed = 0
@@ -31,7 +31,7 @@ rocket = controller.Lander(altitude = startingHeight, velocity = velocity, mass_
 rocket.newTable(time_elapsed, altitude, velocity, m_fuel, m_lander, positionChange, acceleration, impactTime) # Make a new blackboard for trial
 
 isRunning = True
-speed = 100 #1000 is 1 sec (default)
+speed = 20 #1000 is 1 sec (default)
 
 
 # set theme
@@ -93,8 +93,8 @@ graph.bring_figure_to_front(rocketTop)
 graph.bring_figure_to_front(rocketMiddle)
 
 # functions we call every 1 second
-def updateAltitude(thrusterToggle):
-    altitude = rocket.getCurrentAltitude(thrusterToggle)
+def updateAltitude():
+    altitude = rocket.getCurrentAltitude()
     # update altitude
     window['altitudetxt'].update(str(round(altitude, 2)) + " m")
     
@@ -108,8 +108,8 @@ def updateWeight():
     # update weight
     window['weighttxt'].update(str(round(total_mass, 2)) + " kg")
     
-def updateVelocity(thrusterToggle):
-    velocity = rocket.getCurrentLanderVelocity(thrusterToggle)
+def updateVelocity():
+    velocity = rocket.getCurrentLanderVelocity()
     # update velocity
     window['velocitytxt'].update(str(round(velocity, 2)) + " m/s")
     
@@ -197,8 +197,9 @@ while isRunning:
 
 
     # call functions
-    updateAltitude(thrusterToggle)
-    updateVelocity(thrusterToggle)
+    rocket.getCurrentAcceleration(thrusterToggle)    
+    updateAltitude()
+    updateVelocity()
     updateImpactTime()
     moveRocket(thrusterToggle)
     updateFlame(thrusterToggle)
