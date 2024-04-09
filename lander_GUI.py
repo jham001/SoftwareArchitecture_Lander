@@ -150,6 +150,7 @@ def collisionCheck():
             graph.DrawCircle((screenHeight/6,0), 5000, fill_color="red", line_color="orange", line_width=10)
         print(endText)
         psg.popup_ok(endText, title="Game Over")
+        rocket.close()
         isRunning = False
         
 
@@ -213,9 +214,9 @@ while isRunning:
         
     updateWeight()
 
-    collisionCheck()
-
     time_elapsed += 1
     rocket.addRow(time_elapsed)
+
+    collisionCheck()
     
 window.close()

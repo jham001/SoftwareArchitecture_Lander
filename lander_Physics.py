@@ -100,3 +100,6 @@ class Lander:
     
     def addRow(self, time_elapsed):
         lander_Backend.addRow(time_elapsed, self.altitude, self.velocity, self.mass_fuel, self.mass_lander, self.getDisplacement(), self.acceleration, self.impactTime)
+    
+    def close(self):
+        lander_Backend.close()

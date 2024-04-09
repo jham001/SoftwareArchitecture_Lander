@@ -2,13 +2,14 @@
 import sqlite3
 
 table_name = f""  # Declare table_name as a global variable
+dbConnection = sqlite3.connect('blackboard.db') # Connect to blackboard as a global variable
+cursor = dbConnection.cursor() # Connect cursor as a global variable
 
 def newTable(time_elapsed, h, v, m_fuel, m_lander, displacement, acceleration, impactTime):
-    global table_name  # Declare that you are modifying the global variable within this function
-
-    # Connect to blackboard
-    dbConnection = sqlite3.connect('blackboard.db')
-    cursor = dbConnection.cursor()
+    # Declare that you are modifying the global variables within this function
+    global table_name
+    global dbConnection
+    global cursor
 
     # Execute a query to get the number of tables
     cursor.execute("SELECT COUNT(*) FROM sqlite_master WHERE type='table';")
@@ -51,21 +52,13 @@ def newTable(time_elapsed, h, v, m_fuel, m_lander, displacement, acceleration, i
     cursor.execute(sqlCommand, (Time, Altitude, Velocity, Fuel, LanderMass, Displacement, Acceleration, TTI))
 
     # Commit the changes
-    dbConnection.commit()
-    
-    # Close blackboard
-    cursor.close()
-    dbConnection.close()
-
-
-
+    dbConnection.commit()    
 
 def getAltitude():
+    # Declare that you are modifying the global variables within this function
     global table_name
-
-    # Connect to blackboard
-    dbConnection = sqlite3.connect('blackboard.db')
-    cursor = dbConnection.cursor()
+    global dbConnection
+    global cursor
 
     # Value from last row, altitude column
     sqlCommand = f"SELECT altitude FROM {table_name} ORDER BY time_elapsed_sec DESC LIMIT 1"
@@ -76,19 +69,13 @@ def getAltitude():
     if row:
         result = row[0]
 
-    # Close blackboard
-    cursor.close()
-    dbConnection.close()
-
-    return result
-    
+    return result  
 
 def getVelocity():
+    # Declare that you are modifying the global variables within this function
     global table_name
-
-    # Connect to blackboard
-    dbConnection = sqlite3.connect('blackboard.db')
-    cursor = dbConnection.cursor()
+    global dbConnection
+    global cursor
 
     # Value from last row, velocity column
     sqlCommand = f"select velocity from {table_name}"
@@ -98,18 +85,13 @@ def getVelocity():
     for row in cursor:
         result =  row[0]
 
-    # Close blackboard
-    cursor.close()
-    dbConnection.close()
-    
     return result
 
 def getFuelMass():
+    # Declare that you are modifying the global variables within this function
     global table_name
-
-    # Connect to blackboard
-    dbConnection = sqlite3.connect('blackboard.db')
-    cursor = dbConnection.cursor()
+    global dbConnection
+    global cursor
 
     # Value from last row, fuel mass column
     sqlCommand = f"select fuel_mass from {table_name}"
@@ -119,18 +101,13 @@ def getFuelMass():
     for row in cursor:
         result =  row[0]
 
-    # Close blackboard
-    cursor.close()
-    dbConnection.close()
-    
     return result
 
 def getLanderMass():
+    # Declare that you are modifying the global variables within this function
     global table_name
-
-    # Connect to blackboard
-    dbConnection = sqlite3.connect('blackboard.db')
-    cursor = dbConnection.cursor()
+    global dbConnection
+    global cursor
 
     # Value from last row, lander mass column
     sqlCommand = f"select lander_mass from {table_name}"
@@ -140,18 +117,13 @@ def getLanderMass():
     for row in cursor:
         result =  row[0]
 
-    # Close blackboard
-    cursor.close()
-    dbConnection.close()
-    
     return result   
 
 def getTotalMass():
+    # Declare that you are modifying the global variables within this function
     global table_name
-
-    # Connect to blackboard
-    dbConnection = sqlite3.connect('blackboard.db')
-    cursor = dbConnection.cursor()
+    global dbConnection
+    global cursor
 
     # Value from last row, total mass column
     sqlCommand = f"select total_mass from {table_name}"
@@ -161,19 +133,13 @@ def getTotalMass():
     for row in cursor:
         result =  row[0]
 
-    # Close blackboard
-    cursor.close()
-    dbConnection.close()
-
     return result
 
 def addRow(time_elapsed, h, v, m_fuel, m_lander, displacement, acceleration, impactTime):
+    # Declare that you are modifying the global variables within this function
     global table_name
-
-    # Connect to blackboard
-    dbConnection = sqlite3.connect('blackboard.db')
-    cursor = dbConnection.cursor()
-
+    global dbConnection
+    global cursor
 
     # Add new row to DB with this data
     Time = time_elapsed
@@ -191,10 +157,13 @@ def addRow(time_elapsed, h, v, m_fuel, m_lander, displacement, acceleration, imp
     # Execute the insertion with parameterized values
     cursor.execute(sqlCommand, (Time, Altitude, Velocity, Fuel, LanderMass, Displacement, Acceleration, TTI))
     dbConnection.commit()
-    
-    # Close blackboard
-    dbConnection.close()
 
+def close():
+    # Declare global variables and close them
+    global dbConnection
+    global cursor
+    cursor.close()
+    dbConnection.close()
 
 # DB
     # Table Trial #1
