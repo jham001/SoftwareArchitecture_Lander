@@ -10,7 +10,7 @@ import lander_Physics as controller
 import winsound
 
 
-def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consumption):
+def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consumption, speed):
     winsound.PlaySound("holst_mars.wav", winsound.SND_ASYNC | winsound.SND_ALIAS )
 
     # variables
@@ -28,8 +28,9 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
 
     rocket.newTable(time_elapsed, startingHeight, velocity, mass_fuel, mass_lander, positionChange, acceleration, impactTime) # Make a new blackboard for trial
 
-    isRunning = True
-    speed = 20 #1000 is 1 sec (default)
+    global isRunning 
+    isRunning= True
+    #speed = 20 #1000 is 1 sec (default)
 
 
     # set theme
@@ -134,9 +135,10 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
     def collisionCheck():
         velocity = rocket.velocity
         altitude = rocket.altitude
-        global isRunning
     
         if (altitude < 0):
+            global isRunning 
+            isRunning= False
             if (velocity > -5):
                 #YAY
                 endText = "YOU WIN!"
@@ -147,8 +149,6 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
                 graph.DrawCircle((screenHeight/6,0), 5000, fill_color="red", line_color="orange", line_width=10)
             print(endText)
             psg.popup_ok(endText, title="Game Over")
-            rocket.close()
-            isRunning = False
         
 
 
@@ -217,3 +217,4 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
         collisionCheck()
     
     window.close()
+    rocket.close()

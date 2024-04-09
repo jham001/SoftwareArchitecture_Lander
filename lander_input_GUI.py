@@ -62,7 +62,7 @@ while isRunning:
 
     if event == "Land this penguin!":
         isRunning = False;
-        window.close() # user closed the window
+        window.close() # Form Submitted
 
     if event == 'm_lander_input':
         if values['m_lander_input'] and not values['m_lander_input'].isdigit():
@@ -110,4 +110,4 @@ values = {key: int(value) for key, value in values.items()}
 # Launch lander_GUI.py with data
 game.run(startingHeight=values['start_h_input'], velocity=values['start_v_input'],
          mass_fuel=values['f_lander_input'], mass_lander=values['m_lander_input'],
-         F_thrust=values['forceThrust_input'], fuel_consumption=values['consumption_fuel_input'])
+         F_thrust=values['forceThrust_input'], fuel_consumption=values['consumption_fuel_input'], speed=values['simulation_speed_input'])
