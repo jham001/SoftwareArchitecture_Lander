@@ -97,14 +97,13 @@ def updateAltitude():
     altitude = rocket.getCurrentAltitude()
     # update altitude
     window['altitudetxt'].update(str(round(altitude, 2)) + " m")
-    
-def updateFuel():
+        
+def updateWeight():
     fuel = rocket.getFuel()
     # update fuel
     window['fueltxt'].update(f"{round(fuel, 2):.2f}" + " kg")
-    
-def updateWeight():
-    total_mass = rocket.getMass() + m_fuel
+
+    total_mass = rocket.getMass() + rocket.getFuel()
     # update weight
     window['weighttxt'].update(str(round(total_mass, 2)) + " kg")
     
@@ -208,11 +207,11 @@ while isRunning:
 
     if (thrusterToggle):
         window['thrustersdot'].draw_circle((10, 10), 10, fill_color='green')
-        updateFuel()
+        updateWeight()
     else:
         window['thrustersdot'].draw_circle((10, 10), 10, fill_color='red')
         
-    updateWeight()
+
 
     time_elapsed += 1
     rocket.addRow(time_elapsed)
