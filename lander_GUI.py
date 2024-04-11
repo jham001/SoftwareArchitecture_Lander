@@ -2,15 +2,13 @@
 # 2-16-24 David Nalywajko
 
 # libraries
-import PySimpleGUI as psg
-from random import randrange
-import lander_Physics as controller
-import lander_AutoLand_controller as autoland
+import PySimpleGUI as psg                       # for graphics
+from random import randrange                    # for distribution of stars/craters
+import lander_Physics as controller             # physics and planet server controller
+import lander_AutoLand_controller as autoland   # autoland function exernal server
+import winsound                                 # for music
 
-#music
-import winsound
-
-
+# game window function
 def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consumption, speed):
     winsound.PlaySound("holst_mars.wav", winsound.SND_ASYNC | winsound.SND_ALIAS )
 
@@ -21,7 +19,7 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
     impactTime = 999 # s
     acceleration = -2.607 # m/s^2
     thrusterToggle = False
-    parachuteReleased = False
+    #parachuteReleased = False
     automatedLanding = False
 
     moon = controller.Planet(6.67430*10**(-11), 7.34767309*10**22, 1740000.0)
@@ -29,10 +27,8 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
 
     rocket.newTable(time_elapsed, startingHeight, velocity, mass_fuel, mass_lander, positionChange, acceleration, impactTime) # Make a new blackboard for trial
 
-    global isRunning 
-    isRunning= True
-    #speed = 20 #1000 is 1 sec (default)
-
+    global isRunning
+    isRunning = True
 
     # set theme
     psg.theme('DarkBlue13')
@@ -49,7 +45,7 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
         [psg.Text("Velocity:"), psg.Text(str(velocity) + " m/s", key="velocitytxt")],
         [psg.Text("Time until Impact:"), psg.Text(str(impactTime) + " s", key="impacttimetxt")],
         [psg.Graph((20, 20), (0, 0), (20, 20), key="thrustersdot"), psg.Button("Thrusters")],
-        [psg.Graph((20, 20), (0, 0), (20, 20), key="parachutesdot"), psg.Button("Parachute")],
+        #[psg.Graph((20, 20), (0, 0), (20, 20), key="parachutesdot"), psg.Button("Parachute")],
         [psg.Graph((20, 20), (0, 0), (20, 20), key="automatedlandingdot"), psg.Button("Automated Landing")],
     ]
     # column2 setup with graph and anything else we want to add
@@ -62,7 +58,7 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
 
     # bind keys
     window.bind('<space>', 'Thrusters')
-    window.bind('<p>', 'Parachute')
+    #window.bind('<p>', 'Parachute')
     window.bind('<a>', 'Automated Landing')
 
     # objects on the graph
@@ -97,7 +93,7 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
         altitude = rocket.getCurrentAltitude()
         # update altitude
         window['altitudetxt'].update(str(round(altitude, 2)) + " m")
-        
+    
     def updateWeight():
         fuel = rocket.getFuel()
         # update fuel
@@ -124,6 +120,7 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
         graph.MoveFigure(rocketMiddle, 0, positionChange)
         graph.MoveFigure(rocketBottom, 0, positionChange)
         graph.MoveFigure(flame, 0, positionChange)
+    
     def updateFlame(thrusterToggle):
         # make flame red if thrusters on or invisibly black if off
         if thrusterToggle:
@@ -136,7 +133,7 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
     def collisionCheck():
         velocity = rocket.velocity
         altitude = rocket.altitude
-    
+        # check if crashed
         if (altitude < 0):
             global isRunning 
             isRunning= False
@@ -150,14 +147,12 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
                 graph.DrawCircle((screenHeight/6,0), 5000, fill_color="red", line_color="orange", line_width=10)
             print(endText)
             psg.popup_ok(endText, title="Game Over")
-        
+    
 
-
-
-    # infinite loop
+    # game loop
     while isRunning:
-        # line 1 of loop waits 1 second and executes
-        event, values = window.read(timeout = speed)
+        # line 1 of loop waits 1 unit of time and executes
+        event, values = window.read(timeout = speed) # 1000 for one second per second
     
         # get any user inputs
         if event == psg.WIN_CLOSED:
@@ -175,13 +170,13 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
             window['automatedlandingdot'].draw_circle((10, 10), 10, fill_color='red')
     
 
-        if rocket.mass_fuel < 10:
+        if rocket.mass_fuel < fuel_consumption: # if less fuel then can be consumed
             thrusterToggle = False
         elif event == 'Thrusters': # Thruster button pushed
             thrusterToggle = not thrusterToggle
        
-        if event == 'Parachute': # Parachute button pushed
-            parachuteReleased = True
+        #if event == 'Parachute': # Parachute button pushed
+        #    parachuteReleased = True
         
         if event == 'Automated Landing': # Automated Landing button pushed
             automatedLanding = not automatedLanding
@@ -194,7 +189,6 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
         updateImpactTime()
         moveRocket(thrusterToggle)
         updateFlame(thrusterToggle)
-        acceleration = rocket.getCurrentAcceleration(thrusterToggle)
 
         if (thrusterToggle):
             window['thrustersdot'].draw_circle((10, 10), 10, fill_color='green')
@@ -202,7 +196,6 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
         else:
             window['thrustersdot'].draw_circle((10, 10), 10, fill_color='red')
         
-
 
         time_elapsed += 1
         rocket.addRow(time_elapsed)
