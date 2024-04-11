@@ -10,7 +10,6 @@ class Planet:
         
     def get_g(self, h):
         return self.G * self.m / ((self.r + h)**2)
-    
 
 class Lander:
     def __init__(self, altitude: float, velocity: float, mass_fuel: float, mass_lander: float, F_thrust: int, fuel_consumption: int, planet: Planet):
@@ -22,7 +21,6 @@ class Lander:
         self.F_thrust = F_thrust
         self.fuel_consumption = fuel_consumption
         self.planet = planet
-
 
     # get current acceleration
     def getCurrentAcceleration(self, thrusterToggle):
@@ -38,7 +36,6 @@ class Lander:
 
         return self.acceleration
 
-
     # Current Lander Velocity
     def getCurrentLanderVelocity(self):
         dt = 1 # (sec)
@@ -51,7 +48,6 @@ class Lander:
     
         return self.velocity
 
-
     # Current Altitude
     def getCurrentAltitude(self):
         dt = 1 # (sec)
@@ -63,7 +59,6 @@ class Lander:
         self.altitude = h_old + (v_old * dt) + (0.5 * a_t * dt**2)
     
         return self.altitude
-
 
     def getFuel(self):
         self.mass_fuel = lander_Backend.getFuelMass() - self.fuel_consumption
