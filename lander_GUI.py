@@ -5,6 +5,7 @@
 import PySimpleGUI as psg
 from random import randrange
 import lander_Physics as controller
+import lander_AutoLand_controller as autoland
 
 #music
 import winsound
@@ -164,20 +165,12 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
     
         if event == psg.TIMEOUT_KEY:
             pass # user didn't do anything
-    
+   
 
         # Automated Landing
         if automatedLanding == True:
-            velocity = rocket.velocity
-            altitude = rocket.altitude
-        
             window['automatedlandingdot'].draw_circle((10, 10), 10, fill_color='green')
-            if (velocity < (-1200 * ((altitude+2000)/screenHeight))*0.60):
-                thrusterToggle = True
-            elif ((altitude < 100) & (velocity < -5)):
-                thrusterToggle = True
-            else:
-                thrusterToggle = False
+            thrusterToggle = autoland.autoLand(velocity = rocket.velocity, altitude = rocket.altitude, screenHeight=screenHeight)
         else:
             window['automatedlandingdot'].draw_circle((10, 10), 10, fill_color='red')
     
