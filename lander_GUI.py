@@ -82,10 +82,12 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
     #moon
     moon = graph.draw_rectangle(((screenHeight/3),(screenHeight/30)),
         (0,(-screenHeight/30)), line_color='#767676', fill_color='#767676')
+    #for loop generates stars randomly
     for stars in range(300):
         x,y = randrange(int(screenHeight/3)), randrange(int(screenHeight))
         star = graph.draw_circle((x, y), screenHeight/1000, line_color='white',  fill_color='white')
         graph.send_figure_to_back(star)
+    #for loop generates craters randomly
     for craters in range(35):
         x,y = randrange(int(screenHeight/3)), screenHeight/40-randrange(int(screenHeight/30))
         crater = graph.draw_circle((x, y), (randrange(int(6))+3)*100,
@@ -121,7 +123,7 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
         # update impact time
         window['impacttimetxt'].update(str(round(impactTime, 2)) + " s")
     
-    def moveRocket(thrusterToggled):
+    def moveRocket(thrusterToggle):
         positionChange = rocket.getDisplacement()
         # update visual position of rocket
         graph.MoveFigure(rocketTop, 0, positionChange)
@@ -131,7 +133,7 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
     
     def updateFlame(thrusterToggle):
         # make flame red if thrusters on or invisibly black if off
-        if thrusterToggled:
+        if thrusterToggle:
             graph.Widget.itemconfig(flame, fill="red")
             graph.bring_figure_to_front(flame)
         else:
@@ -181,7 +183,7 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
         if rocket.mass_fuel < fuel_consumption: # if less fuel then can be consumed
             thrusterToggle = False
         elif event == 'Thrusters': # Thruster button pushed
-            thrusterToggled = not thrusterToggled
+            thrusterToggle = not thrusterToggle
        
         #if event == 'Parachute': # Parachute button pushed
         #    parachuteReleased = True
@@ -191,14 +193,14 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
 
 
         # call functions
-        rocket.getCurrentAcceleration(thrusterToggled)    
+        rocket.getCurrentAcceleration(thrusterToggle)    
         updateAltitude()
         updateVelocity()
         updateImpactTime()
         moveRocket(thrusterToggle)
         updateFlame(thrusterToggle)
 
-        if (thrusterToggled):
+        if (thrusterToggle):
             window['thrustersdot'].draw_circle((10, 10), 10, fill_color='green')
             updateWeight()
         else:
