@@ -1,6 +1,6 @@
 import PySimpleGUI as psg
 import lander_GUI as game
-
+#RUN THIS FILE
 
 inputColumn1 = [
     [psg.Text("Rocket Mass:")],
