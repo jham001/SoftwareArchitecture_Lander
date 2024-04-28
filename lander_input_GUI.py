@@ -2,6 +2,8 @@ import PySimpleGUI as psg
 import lander_GUI as game
 #RUN THIS FILE
 
+#CREATE UI/FORM FOR INITIAL VALUE INPUTS
+#create column 1 to denote input field labels
 inputColumn1 = [
     [psg.Text("Rocket Mass:")],
     [psg.Text("Rocket Fuel:")],
@@ -13,6 +15,7 @@ inputColumn1 = [
    
 ]
 
+#create column 2 for input fields
 inputColumn2=[
     [psg.InputText('', enable_events=True, key='m_lander_input', justification='left')],
     [psg.InputText('', enable_events=True, key='f_lander_input', justification='left')],
@@ -22,15 +25,20 @@ inputColumn2=[
     [psg.InputText('', enable_events=True, key='consumption_fuel_input', justification='left')],
     [psg.InputText('', enable_events=True, key='simulation_speed_input', justification='left')],
 ]
+
+#create button to submit input field form
 bottomRow=[[psg.Button("Land this penguin!")]]
 
-# layout puts the window layout together and window instantiates the window
+#layout puts the window layout together
 layout = [[psg.Column(inputColumn1), psg.VSeparator(), psg.Column(inputColumn2)],[psg.Column(bottomRow)]]
+#window instantiates the window
 window = psg.Window('Input Value Window', layout, finalize=True)
 
+#set isRunning as true for the collection of data in the form
 isRunning = True
 
-# Predefined values
+#set defaults of initial value form as these predefined values
+#fields will have these values predefined for a standard moon landing simulation
 predefined_values = {
     'm_lander_input': '3000',  
     'f_lander_input': '3000', 
@@ -41,73 +49,109 @@ predefined_values = {
     'simulation_speed_input': '50'  
 }
 
-# Update input fields with predefined values
+#update input fields with predefined values, a.k.a insert predefined values into form fields
 for key, value in predefined_values.items():
     window[key].update(value)
 
-# Update input fields with predefined values
+#update input fields with predefined values 
+#!FIXME: REMOVE THIS BLOCK IF DUPLICATE
 for key, value in predefined_values.items():
     window[key].update(value)
 
+#LOOP MAINTAINS THE WINDOW AS OPENED AND LISTENS FOR EVENTS, ALSO PROVIDES FORM VALIDATION
 while isRunning:
-    # line 1 of loop waits 1 second and executes
+    #line 1 of loop waits 1 second and executes, checks every second for events
     event, values = window.read(timeout = 1000)
     
-    # get any user inputs
+    #if user closes the window then the initial window loop closes
     if event == psg.WIN_CLOSED:
-        break # user closed the window
+        break
     
+    #if the user does nothing the loop continues on
     if event == psg.TIMEOUT_KEY:
-        pass # user didn't do anything
+        pass
 
+    #if user chooses to submit the form then the loop breaks and the window closes so the program may begin
     if event == "Land this penguin!":
-        isRunning = False;
-        window.close() # Form Submitted
+        #break the loop and close the window
+        isRunning = False
+        window.close()
 
+    #if the user changes the lander mass input then the input is validated as a number
     if event == 'm_lander_input':
+        #if the user adds input and the input is not a digit
         if values['m_lander_input'] and not values['m_lander_input'].isdigit():
+            #output the error message in a popup window
             psg.popup("Only digits allowed")
+            #remove the content from the input field
             window['m_lander_input'].update(values['m_lander_input'][:-1])
 
+    #if the user changes the fuel mass input then the input is validated as a number
     if event == 'f_lander_input':
+        #if the user adds input and the input is not a digit
         if values['f_lander_input'] and not values['f_lander_input'].isdigit():
+            #output the error message in a popup window
             psg.popup("Only digits allowed")
+            #remove the content from the input field
             window['f_lander_input'].update(values['f_lander_input'][:-1])
 
+    #if the user changes the starting height input then the input is validated as a number
     if event == 'start_h_input':
+        #if the user adds input and the input is not a digit
         if values['start_h_input'] and not values['start_h_input'].isdigit():
+            #output the error message in a popup window
             psg.popup("Only digits allowed")
+            #remove the content from the input field
             window['start_h_input'].update(values['start_h_input'][:-1])
 
+    #if the user changes the starting velocity input then the input is validated as a number
     if event == 'start_v_input':
+        #stores user input as a new variable to differentiate the input string given its negative sign requirement
         input_text = values['start_v_input']
+        #check that the user input begins with a negative sign and is a number
         if input_text and not ((input_text == '-' and len(input_text) == 1) or (input_text.startswith('-') and input_text[1:].isdigit())):
-            psg.popup("Only integers allowed")
+            #output the error message in a popup window
+            psg.popup("Only negative integers allowed")
+            #remove the content from the input field
             window['start_v_input'].update(input_text[:-1])
 
+    #!FIXME: WHAT IS FORCE THRUST?
+    #if the user changes the force thrust input then the input is validated as a number
     if event == 'forceThrust_input':
+        #if the user adds input and the input is not a digit
         if values['forceThrust_input'] and not values['forceThrust_input'].isdigit():
+            #output the error message in a popup window
             psg.popup("Only digits allowed")
+            #remove the content from the input field
             window['forceThrust_input'].update(values['forceThrust_input'][:-1])
 
+    #!FIXME: WHAT IS CONSUMPTION FUEL?
+    #if the user changes the consumption fuel input then the input is validated as a number
     if event == 'consumption_fuel_input':
+        #if the user adds input and the input is not a digit
         if values['consumption_fuel_input'] and not values['consumption_fuel_input'].isdigit():
+            #output the error message in a popup window
             psg.popup("Only digits allowed")
+            #remove the content from the input field
             window['consumption_fuel_input'].update(values['consumption_fuel_input'][:-1])
 
+    #if the user changes the simulation speed input then the input is validated as a number
     if event == 'simulation_speed_input':
+        #if the user adds input and the input is not a digit
         if values['simulation_speed_input'] and not values['simulation_speed_input'].isdigit():
+            #output the error message in a popup window
             psg.popup("Only digits allowed")
+            #remove the content from the input field
             window['simulation_speed_input'].update(values['simulation_speed_input'][:-1])
 
-# Convert values to integers
-# Replace '-' with '0' if the value is just '-'
+#VALUE CONVERSION FOR MAIN PROGRAM
+#Replace '-' with '0' if the value is just '-'
 values = {key: ('0' if value == '-' else value) for key, value in values.items()}
 
-# Convert values to integers
+#Convert every other value to an integer
 values = {key: int(value) for key, value in values.items()}
 
-# Launch lander_GUI.py with data
+#LAUNCH lander_GUI.py WITH CONVERTED DATA
 game.run(startingHeight=values['start_h_input'], velocity=values['start_v_input'],
          mass_fuel=values['f_lander_input'], mass_lander=values['m_lander_input'],
          F_thrust=values['forceThrust_input'], fuel_consumption=values['consumption_fuel_input'], speed=values['simulation_speed_input'])
