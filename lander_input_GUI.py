@@ -53,11 +53,6 @@ predefined_values = {
 for key, value in predefined_values.items():
     window[key].update(value)
 
-#update input fields with predefined values 
-#!FIXME: REMOVE THIS BLOCK IF DUPLICATE
-for key, value in predefined_values.items():
-    window[key].update(value)
-
 #LOOP MAINTAINS THE WINDOW AS OPENED AND LISTENS FOR EVENTS, ALSO PROVIDES FORM VALIDATION
 while isRunning:
     #line 1 of loop waits 1 second and executes, checks every second for events
@@ -115,7 +110,6 @@ while isRunning:
             #remove the content from the input field
             window['start_v_input'].update(input_text[:-1])
 
-    #!FIXME: WHAT IS FORCE THRUST?
     #if the user changes the force thrust input then the input is validated as a number
     if event == 'forceThrust_input':
         #if the user adds input and the input is not a digit
@@ -125,7 +119,6 @@ while isRunning:
             #remove the content from the input field
             window['forceThrust_input'].update(values['forceThrust_input'][:-1])
 
-    #!FIXME: WHAT IS CONSUMPTION FUEL?
     #if the user changes the consumption fuel input then the input is validated as a number
     if event == 'consumption_fuel_input':
         #if the user adds input and the input is not a digit
@@ -145,8 +138,8 @@ while isRunning:
             window['simulation_speed_input'].update(values['simulation_speed_input'][:-1])
 
 #VALUE CONVERSION FOR MAIN PROGRAM
-#Replace '-' with '0' if the value is just '-'
-values = {key: ('0' if value == '-' else value) for key, value in values.items()}
+#Replace '-' with '0' if the value is just '-' or blank
+values = {key: ('0' if (value == '-' or value == '') else value) for key, value in values.items()}
 
 #Convert every other value to an integer
 values = {key: int(value) for key, value in values.items()}
