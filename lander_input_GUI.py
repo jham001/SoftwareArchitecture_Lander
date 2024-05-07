@@ -2,6 +2,11 @@ import PySimpleGUI as psg
 import lander_GUI as game
 #RUN THIS FILE
 
+#Scenarios
+#Lander only with some instruments
+#Lander with Rover for experiments
+#Lander with 1 and 2 astronauts
+
 #CREATE UI/FORM FOR INITIAL VALUE INPUTS
 #create column 1 to denote input field labels
 inputColumn1 = [
