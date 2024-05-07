@@ -54,6 +54,7 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
         [psg.Graph((20, 20), (0, 0), (20, 20), key="thrustersdot"), psg.Button("Thrusters")],
         #[psg.Graph((20, 20), (0, 0), (20, 20), key="parachutesdot"), psg.Button("Parachute")],
         [psg.Graph((20, 20), (0, 0), (20, 20), key="automatedlandingdot"), psg.Button("Automated Landing")],
+        [psg.Text("\t\t\t\t")] # this puts a buffer that stops the screen from resizing
     ]
     #column2 setup with graph and anything else we want to add
     column2 = [
