@@ -92,62 +92,63 @@ def getVelocity():
         result = row[0]
     #return row
     return result
-#!FIXME: LEFT OFF HERE!!!!!!!!!!!!
+
+#getter function that returns fuel mass from database
 def getFuelMass():
-    # Declare that you are modifying the global variables within this function
+    #declare that you are modifying the global variables within this function
     global table_name
     global dbConnection
     global cursor
-
-    # Value from last row, fuel mass column
+    #value from last row, fuel mass column
     sqlCommand = f"select fuel_mass from {table_name}"
     cursor = dbConnection.execute(sqlCommand)
-    
+    #store row 0 result in the result variable
     result = 0
     for row in cursor:
         result =  row[0]
-
+    #return row
     return result
 
+#getter function that returns lander mass from database
 def getLanderMass():
-    # Declare that you are modifying the global variables within this function
+    #declare that you are modifying the global variables within this function
     global table_name
     global dbConnection
     global cursor
-
-    # Value from last row, lander mass column
+    #value from last row, lander mass column
     sqlCommand = f"select lander_mass from {table_name}"
     cursor = dbConnection.execute(sqlCommand)
-    
+    #store row 0 result in the result variable
     result = 0
     for row in cursor:
         result =  row[0]
-
+    #return row
     return result   
 
+#getter function that returns total mass from database
 def getTotalMass():
-    # Declare that you are modifying the global variables within this function
+    #declare that you are modifying the global variables within this function
     global table_name
     global dbConnection
     global cursor
-
-    # Value from last row, total mass column
+    #value from last row, lander mass column
     sqlCommand = f"select total_mass from {table_name}"
     cursor = dbConnection.execute(sqlCommand)
-    
+    #store row 0 result in the result variable
     result = 0
     for row in cursor:
         result =  row[0]
-
+    #return row
     return result
 
+#function adds row to database using parameters converted into a SQL command
 def addRow(time_elapsed, h, v, m_fuel, m_lander, displacement, acceleration, impactTime):
-    # Declare that you are modifying the global variables within this function
+    #declare that you are modifying the global variables within this function
     global table_name
     global dbConnection
     global cursor
 
-    # Add new row to DB with this data
+    #add new row to DB with this data
     Time = time_elapsed
     Altitude = h
     Velocity = v
@@ -157,16 +158,18 @@ def addRow(time_elapsed, h, v, m_fuel, m_lander, displacement, acceleration, imp
     Acceleration = acceleration
     TTI = impactTime
 
-    # Construct the SQL command for insertion
+    #construct the SQL command for insertion
     sqlCommand = f"INSERT INTO {table_name} (time_elapsed_sec, altitude, velocity, fuel_mass, lander_mass, displacement, acceleration, time_till_impact) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
 
-    # Execute the insertion with parameterized values
+    #execute the insertion with parameterized values
     cursor.execute(sqlCommand, (Time, Altitude, Velocity, Fuel, LanderMass, Displacement, Acceleration, TTI))
     dbConnection.commit()
 
+#function closes the database connection and the cursor 
 def close():
-    # Declare global variables and close them
+    #declare global variables
     global dbConnection
     global cursor
+    #close both global variables
     cursor.close()
     dbConnection.close()
