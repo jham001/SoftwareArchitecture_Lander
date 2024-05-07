@@ -103,6 +103,10 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
     graph.bring_figure_to_front(rocketTop)
     graph.bring_figure_to_front(rocketMiddle)
 
+    graph.MoveFigure(rocketTop, 0, 650 + (screenHeight/30))
+    graph.MoveFigure(rocketMiddle, 0, 650 + (screenHeight/30))
+    graph.MoveFigure(rocketBottom, 0, 650 + (screenHeight/30))
+    graph.MoveFigure(flame, 0, 650 + (screenHeight/30))
     #functions we call every 1 second
     def updateAltitude():
         altitude = rocket.getCurrentAltitude()
