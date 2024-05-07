@@ -49,6 +49,70 @@ predefined_values = {
     'simulation_speed_input': '50'  
 }
 
+
+#define function that validates values in while loop
+#this prevents erroneous values from breaking the lander function
+def validateInputValues(event, values):
+    #if the user changes the lander mass input then the input is validated as a number
+    if event == 'm_lander_input':
+        #if the user adds input and the input is not a digit
+        if values['m_lander_input'] and not values['m_lander_input'].isdigit():
+            #output the error message in a popup window
+            psg.popup("Only digits allowed")
+            #remove the content from the input field
+            window['m_lander_input'].update(values['m_lander_input'][:-1])
+    #if the user changes the fuel mass input then the input is validated as a number
+    if event == 'f_lander_input':
+        #if the user adds input and the input is not a digit
+        if values['f_lander_input'] and not values['f_lander_input'].isdigit():
+            #output the error message in a popup window
+            psg.popup("Only digits allowed")
+            #remove the content from the input field
+            window['f_lander_input'].update(values['f_lander_input'][:-1])
+    #if the user changes the starting height input then the input is validated as a number
+    if event == 'start_h_input':
+        #if the user adds input and the input is not a digit
+        if values['start_h_input'] and not values['start_h_input'].isdigit():
+            #output the error message in a popup window
+            psg.popup("Only digits allowed")
+            #remove the content from the input field
+            window['start_h_input'].update(values['start_h_input'][:-1])
+    #if the user changes the starting velocity input then the input is validated as a number
+    if event == 'start_v_input':
+        #stores user input as a new variable to differentiate the input string given its negative sign requirement
+        input_text = values['start_v_input']
+        #check that the user input begins with a negative sign and is a number
+        if input_text and not ((input_text == '-' and len(input_text) == 1) or (input_text.startswith('-') and input_text[1:].isdigit())):
+            #output the error message in a popup window
+            psg.popup("Only negative integers allowed")
+            #remove the content from the input field
+            window['start_v_input'].update(input_text[:-1])
+    #if the user changes the force thrust input then the input is validated as a number
+    if event == 'forceThrust_input':
+        #if the user adds input and the input is not a digit
+        if values['forceThrust_input'] and not values['forceThrust_input'].isdigit():
+            #output the error message in a popup window
+            psg.popup("Only digits allowed")
+            #remove the content from the input field
+            window['forceThrust_input'].update(values['forceThrust_input'][:-1])
+    #if the user changes the consumption fuel input then the input is validated as a number
+    if event == 'consumption_fuel_input':
+        #if the user adds input and the input is not a digit
+        if values['consumption_fuel_input'] and not values['consumption_fuel_input'].isdigit():
+            #output the error message in a popup window
+            psg.popup("Only digits allowed")
+            #remove the content from the input field
+            window['consumption_fuel_input'].update(values['consumption_fuel_input'][:-1])
+    #if the user changes the simulation speed input then the input is validated as a number
+    if event == 'simulation_speed_input':
+        #if the user adds input and the input is not a digit
+        if values['simulation_speed_input'] and not values['simulation_speed_input'].isdigit():
+            #output the error message in a popup window
+            psg.popup("Only digits allowed")
+            #remove the content from the input field
+            window['simulation_speed_input'].update(values['simulation_speed_input'][:-1])
+
+
 #update input fields with predefined values, a.k.a insert predefined values into form fields
 for key, value in predefined_values.items():
     window[key].update(value)
@@ -65,77 +129,13 @@ while isRunning:
     #if the user does nothing the loop continues on
     if event == psg.TIMEOUT_KEY:
         pass
-
     #if user chooses to submit the form then the loop breaks and the window closes so the program may begin
     if event == "Land this penguin!":
         #break the loop and close the window
         isRunning = False
         window.close()
-
-    #if the user changes the lander mass input then the input is validated as a number
-    if event == 'm_lander_input':
-        #if the user adds input and the input is not a digit
-        if values['m_lander_input'] and not values['m_lander_input'].isdigit():
-            #output the error message in a popup window
-            psg.popup("Only digits allowed")
-            #remove the content from the input field
-            window['m_lander_input'].update(values['m_lander_input'][:-1])
-
-    #if the user changes the fuel mass input then the input is validated as a number
-    if event == 'f_lander_input':
-        #if the user adds input and the input is not a digit
-        if values['f_lander_input'] and not values['f_lander_input'].isdigit():
-            #output the error message in a popup window
-            psg.popup("Only digits allowed")
-            #remove the content from the input field
-            window['f_lander_input'].update(values['f_lander_input'][:-1])
-
-    #if the user changes the starting height input then the input is validated as a number
-    if event == 'start_h_input':
-        #if the user adds input and the input is not a digit
-        if values['start_h_input'] and not values['start_h_input'].isdigit():
-            #output the error message in a popup window
-            psg.popup("Only digits allowed")
-            #remove the content from the input field
-            window['start_h_input'].update(values['start_h_input'][:-1])
-
-    #if the user changes the starting velocity input then the input is validated as a number
-    if event == 'start_v_input':
-        #stores user input as a new variable to differentiate the input string given its negative sign requirement
-        input_text = values['start_v_input']
-        #check that the user input begins with a negative sign and is a number
-        if input_text and not ((input_text == '-' and len(input_text) == 1) or (input_text.startswith('-') and input_text[1:].isdigit())):
-            #output the error message in a popup window
-            psg.popup("Only negative integers allowed")
-            #remove the content from the input field
-            window['start_v_input'].update(input_text[:-1])
-
-    #if the user changes the force thrust input then the input is validated as a number
-    if event == 'forceThrust_input':
-        #if the user adds input and the input is not a digit
-        if values['forceThrust_input'] and not values['forceThrust_input'].isdigit():
-            #output the error message in a popup window
-            psg.popup("Only digits allowed")
-            #remove the content from the input field
-            window['forceThrust_input'].update(values['forceThrust_input'][:-1])
-
-    #if the user changes the consumption fuel input then the input is validated as a number
-    if event == 'consumption_fuel_input':
-        #if the user adds input and the input is not a digit
-        if values['consumption_fuel_input'] and not values['consumption_fuel_input'].isdigit():
-            #output the error message in a popup window
-            psg.popup("Only digits allowed")
-            #remove the content from the input field
-            window['consumption_fuel_input'].update(values['consumption_fuel_input'][:-1])
-
-    #if the user changes the simulation speed input then the input is validated as a number
-    if event == 'simulation_speed_input':
-        #if the user adds input and the input is not a digit
-        if values['simulation_speed_input'] and not values['simulation_speed_input'].isdigit():
-            #output the error message in a popup window
-            psg.popup("Only digits allowed")
-            #remove the content from the input field
-            window['simulation_speed_input'].update(values['simulation_speed_input'][:-1])
+    #call function to validate all the values and prevent erroneous input
+    validateInputValues(event, values)
 
 #VALUE CONVERSION FOR MAIN PROGRAM
 #Replace '-' with '0' if the value is just '-' or blank
