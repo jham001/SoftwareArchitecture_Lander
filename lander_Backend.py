@@ -1,4 +1,4 @@
-import sqlite3 # database library
+import sqlite3 #database library
 
 #declare table name as a global variable
 table_name = f""

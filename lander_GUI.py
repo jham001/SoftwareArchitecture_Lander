@@ -102,7 +102,8 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
     graph.bring_figure_to_front(rocketBottom)
     graph.bring_figure_to_front(rocketTop)
     graph.bring_figure_to_front(rocketMiddle)
-
+    #offset the rocket visually by the height of the moon so that the rocket appears to land on the moon surface
+    #does not change the actual database/display values
     graph.MoveFigure(rocketTop, 0, 650 + (screenHeight/30))
     graph.MoveFigure(rocketMiddle, 0, 650 + (screenHeight/30))
     graph.MoveFigure(rocketBottom, 0, 650 + (screenHeight/30))
@@ -113,26 +114,34 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
         #update altitude
         window['altitudetxt'].update(str(round(altitude, 2)) + " m")
     
+    #updates the weight being displayed on the sidebar of the main game window
     def updateWeight():
+        #fuel mass is updated
         fuel = rocket.getFuel()
         #update fuel
         window['fueltxt'].update(f"{round(fuel, 2):.2f}" + " kg")
-
+        #total mass is calculated and updated
         total_mass = rocket.getMass() + rocket.getFuel()
-        #update weight
+        #update weight being displayed
         window['weighttxt'].update(str(round(total_mass, 2)) + " kg")
-    
+
+    #updates the velocity being displayed on the sidebar of the main game window
     def updateVelocity():
+        #current velocity is stored in a variable
         velocity = rocket.getCurrentLanderVelocity()
-        #update velocity
+        #update velocity being displayed
         window['velocitytxt'].update(str(round(velocity, 2)) + " m/s")
     
+    #updates the impact time being displayed on the sidebar of the main game window
     def updateImpactTime():
+        #current impact time is stored in a variable
         impactTime = rocket.getImpactTime()
-        #update impact time
+        #update impact time being displayed
         window['impacttimetxt'].update(str(round(impactTime, 2)) + " s")
     
+    #updates the visual rocket position in the main game window
     def moveRocket(thrusterToggle):
+        #displacement of the rocket is stored in the positionChange variable
         positionChange = rocket.getDisplacement()
         #update visual position of rocket
         graph.MoveFigure(rocketTop, 0, positionChange)
@@ -140,7 +149,7 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
         graph.MoveFigure(rocketBottom, 0, positionChange)
         graph.MoveFigure(flame, 0, positionChange)
     
-    #function to update flame
+    #function to update flame depending on toggle status in a given moment
     def updateFlame(thrusterToggle):
         #if the thruster is toggled then make the flame red and bring it to the front
         if thrusterToggle:
@@ -189,7 +198,6 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
         #if user does nothing, continue the loop
         if event == psg.TIMEOUT_KEY:
             pass 
-   
 
         #AUTOMATED LANDING
         #if automatedLanding toggle is true selects automated landing
@@ -215,7 +223,7 @@ def run(startingHeight, mass_fuel, mass_lander, velocity, F_thrust, fuel_consump
         elif event == 'Thrusters': 
             thrusterToggle = not thrusterToggle
        
-        #PARACHUTE
+        #PARACHUTE (NOT INCLUDED, MOON HAS NO ATMOSPHERE TO WORK WITH)
         #if event == 'Parachute': # Parachute button pushed
             #parachuteReleased = True
         
